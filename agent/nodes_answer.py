@@ -168,4 +168,8 @@ Write the final answer to the user, following the system instructions above."""
         state["answer_draft"] = f"I encountered an error while generating the answer: {str(e)}"
         state["ready_for_reflection"] = True
 
+    # IMPORTANT: mark episode as done so the controller routes to "end"
+    # This prevents infinite loops when answer step is reached
+    state["done"] = True
+
     return state

@@ -202,12 +202,13 @@ Create a plan to answer the user's query. Output the JSON plan."""
 async def _replan(state: AgentState, llm, memory_view: str, model_name: str) -> AgentState:
     """Analyze execution and update plan if needed."""
     
-    # Increment replan count
+    # Increment replan count - this is called when we need to replan
     state["replan_count"] = state.get("replan_count", 0) + 1
     
     system_prompt = """You are a sophisticated planning assistant that reviews agent execution.
     
 Your goal is to check if the current plan execution has gathered enough correct information to answer the user's query.
+The first time you are called, there will be just a user query, no plan or execution history, so you should just plan the steps to answer the user's query.
 
 Review the:
 1. User Query
@@ -277,29 +278,41 @@ Analyze the execution. Are we ready to answer? If not, provide new steps and fee
         new_steps = result.get("new_steps", [])
         feedback = result.get("feedback", "")
         
+        # If planner says not ready but provides no new steps, force readiness to prevent infinite loop
+        if not is_ready and not new_steps:
+            is_ready = True
+        
         state["is_ready_for_answer"] = is_ready
         state["feedback"] = feedback
         
         if not is_ready and new_steps:
-            # Snapshot current plan
+            # Snapshot current plan before modification
             current_plan = copy.deepcopy(state["plan"])
             state.setdefault("plan_history", []).append(current_plan)
             
-            # Append new steps
+            steps = state["plan"]["steps"]
+            
+            # We will append new steps at the end, and then jump the cursor to the first new step.
+            # This ensures they actually get executed next.
+            insertion_index = len(steps)  # index of the first new step after append
+            
             # Ensure IDs are unique/sequential based on previous last step
             last_id = 0
-            if state["plan"]["steps"]:
-                last_step = state["plan"]["steps"][-1]
+            if steps:
+                last_step = steps[-1]
                 last_id = last_step.get("id", 0)
-                if isinstance(last_id, str): # Handle string ids if present
-                     try: last_id = int(last_id)
-                     except: last_id = 0
+                if isinstance(last_id, str):
+                    try:
+                        last_id = int(last_id)
+                    except:
+                        last_id = 0
 
             for i, step in enumerate(new_steps):
                 step["id"] = last_id + i + 1
-                state["plan"]["steps"].append(step)
+                steps.append(step)
             
-            # Note: step_cursor stays where it was (pointing to end of old list, which is start of new steps)
+            # IMPORTANT: move cursor to the first new step
+            state["step_cursor"] = insertion_index
             
         create_trace_event(
             node_name="planner_replan",
