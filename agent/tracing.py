@@ -17,6 +17,7 @@ def create_trace_event(
     total_tokens: int | None = None,
     latency_ms: float | None = None,
     tool_name: str | None = None,
+    model_name: str | None = None,
     error: str | None = None,
 ) -> dict:
     """Create a TraceEvent and append it to state.trajectory."""
@@ -32,6 +33,7 @@ def create_trace_event(
         total_tokens=total_tokens,
         latency_ms=latency_ms,
         tool_name=tool_name,
+        model_name=model_name,
         error=error,
     )
     event_dict = event_to_dict(event)
@@ -46,11 +48,19 @@ async def traced_llm_call(
     state: AgentState,
     llm_callable: Callable[..., Any],
     llm_input: dict | str,
+    model_name: str | None = None,
+    is_sync: bool = False,
     **kwargs
 ) -> Any:
     """
     Call the given llm_callable, measure latency and token usage (if available),
     append a TraceEvent to state.trajectory, and return the output.
+    
+    If is_sync is True, llm_callable.invoke is called synchronously.
+    Otherwise (default), we assume it can be awaited if needed or use invoke if it's a sync wrapper.
+    However, LangChain LLMs are often invoked with .invoke() (sync) or .ainvoke() (async).
+    This function wrapper is async, so it's best suited for async callers.
+    But if the underlying call is sync, we can just call .invoke().
     """
     start_time = time.time()
     error = None
@@ -62,12 +72,30 @@ async def traced_llm_call(
     try:
         # Call the LLM
         # llm_input should be a list of messages or a single message
-        if isinstance(llm_input, list):
-            response = llm_callable.invoke(llm_input)
-        elif isinstance(llm_input, dict):
-            response = llm_callable.invoke(**llm_input, **kwargs)
+        if is_sync:
+             if isinstance(llm_input, list):
+                response = llm_callable.invoke(llm_input)
+             elif isinstance(llm_input, dict):
+                response = llm_callable.invoke(**llm_input, **kwargs)
+             else:
+                response = llm_callable.invoke(llm_input, **kwargs)
         else:
-            response = llm_callable.invoke(llm_input, **kwargs)
+            # Prefer ainvoke if available, otherwise invoke
+            if hasattr(llm_callable, 'ainvoke'):
+                if isinstance(llm_input, list):
+                    response = await llm_callable.ainvoke(llm_input)
+                elif isinstance(llm_input, dict):
+                    response = await llm_callable.ainvoke(**llm_input, **kwargs)
+                else:
+                    response = await llm_callable.ainvoke(llm_input, **kwargs)
+            else:
+                 # Fallback to sync invoke if ainvoke missing
+                 if isinstance(llm_input, list):
+                    response = llm_callable.invoke(llm_input)
+                 elif isinstance(llm_input, dict):
+                    response = llm_callable.invoke(**llm_input, **kwargs)
+                 else:
+                    response = llm_callable.invoke(llm_input, **kwargs)
         
         output = response
         
@@ -129,6 +157,7 @@ async def traced_llm_call(
             completion_tokens=completion_tokens,
             total_tokens=total_tokens,
             latency_ms=latency_ms,
+            model_name=model_name,
             error=error,
         )
     
@@ -168,7 +197,12 @@ def traced_tool_call(
         
         # Prepare input/output for logging
         # For tool calls, especially SQL, we need more space to see full results
-        input_str = str(tool_input)[:2000] if tool_input else None
+        # Remove 'state' from tool_input if present to avoid circular reference in logs
+        if isinstance(tool_input, dict):
+            clean_input = {k: v for k, v in tool_input.items() if k != "state"}
+            input_str = str(clean_input)[:2000] if clean_input else None
+        else:
+            input_str = str(tool_input)[:2000] if tool_input else None
         
         # For output, preserve full structure for SQL results
         if tool_name == "sql_tool" and isinstance(output, dict):

@@ -2,7 +2,7 @@
 
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain.chat_models import init_chat_model
+from agent.llm_utils import init_llm
 
 from agent.state import AgentState, build_memory_view
 from agent.tracing import traced_llm_call
@@ -110,7 +110,7 @@ Analyze and return structured JSON identifying specific problems."""
         import os
         config = state.get("config", {})
         model_name = config.get("reflection_model") or os.getenv("REFLECTION_MODEL") or config.get("model_name", "gpt-4o-mini")
-        llm = init_chat_model(model_name)
+        llm, actual_model_name = init_llm(model_name)
         
         # Prepare messages
         messages = [
@@ -123,7 +123,8 @@ Analyze and return structured JSON identifying specific problems."""
             node_name="reflection",
             state=state,
             llm_callable=llm,
-            llm_input=messages
+            llm_input=messages,
+            model_name=actual_model_name
         )
         
         # Parse structured reflection JSON

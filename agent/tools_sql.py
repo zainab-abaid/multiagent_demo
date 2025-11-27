@@ -5,9 +5,11 @@ import logging
 import requests
 from typing import Optional
 
-from langchain.chat_models import init_chat_model
+from agent.llm_utils import init_llm
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
+from agent.tracing import traced_llm_call
+from agent.state import AgentState
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +56,7 @@ def _init_db():
     # Use SQL_MODEL env var or default
     import os
     sql_model = os.getenv("SQL_MODEL", "gpt-4o-mini")
-    llm = init_chat_model(sql_model)
+    llm, _ = init_llm(sql_model)  # Model name not needed for toolkit initialization
     toolkit = SQLDatabaseToolkit(db=_db, llm=llm)
     tools = toolkit.get_tools()
     _run_query_tool = next(t for t in tools if t.name == "sql_db_query")
@@ -140,7 +142,7 @@ def sql_tool(query: str) -> dict:
         }
 
 
-def sql_tool_nl_to_sql(natural_language_query: str, model_name: str | None = None) -> dict:
+def sql_tool_nl_to_sql(natural_language_query: str, state: AgentState | None = None, model_name: str | None = None, feedback: str | None = None) -> dict:
     """
     Convert natural language to SQL and execute it.
     
@@ -151,8 +153,12 @@ def sql_tool_nl_to_sql(natural_language_query: str, model_name: str | None = Non
     ----------
     natural_language_query : str
         Natural language question
+    state : AgentState
+        Current agent state (needed for tracing)
     model_name : str
         LLM model to use for SQL generation
+    feedback : str
+        Feedback from previous attempts to correct mistakes
         
     Returns
     -------
@@ -160,24 +166,30 @@ def sql_tool_nl_to_sql(natural_language_query: str, model_name: str | None = Non
         Results with both the generated SQL and execution results
     """
     from langchain_core.messages import HumanMessage, SystemMessage
-    from langchain.chat_models import init_chat_model
+    from agent.llm_utils import init_llm
     import os
+    import asyncio
     
     # Get model name from env if not provided, fallback to default
     if model_name is None:
         model_name = os.getenv("SQL_MODEL", "gpt-4o-mini")
     
     db, run_query_tool = _init_db()
-    llm = init_chat_model(model_name)
+    llm, actual_model_name = init_llm(model_name)
     
     # Get schema for context (uses cached schema if available)
     schema = get_db_schema()
+    
+    feedback_section = ""
+    if feedback:
+        feedback_section = f"\nPREVIOUS MISTAKES/FEEDBACK:\n{feedback}\n\nUse this feedback to correct your previous SQL query."
     
     system_prompt = f"""You are an assistant that answers questions by writing SQL queries against
 the Chinook music store database.
 
 Database schema:
 {schema}
+{feedback_section}
 
 When the user asks a question, you should:
 1. Write a syntactically correct SQL query.
@@ -203,7 +215,77 @@ Return ONLY the SQL query, nothing else."""
             SystemMessage(content=system_prompt),
             HumanMessage(content=natural_language_query)
         ]
-        response = llm.invoke(messages)
+        
+        if state:
+            # traced_llm_call is async, but this tool function is synchronous.
+            # We can use asyncio.run if we are in a sync context, but usually this is called from an async node.
+            # However, nodes_tools.py calls this tool via traced_tool_call which expects a sync callable (mostly).
+            # Wait, tool_caller_node is async. traced_tool_call calls the callable.
+            # If we make this function async, traced_tool_call needs to handle async callables or await them.
+            # Currently traced_tool_call is sync-style (no await on output = tool_callable(...)).
+            
+            # To fix this without refactoring traced_tool_call to be async (which might break other things),
+            # we can run the async trace call synchronously here since it's just an LLM call.
+            # But asyncio.run() fails if there is already a loop running.
+            
+            # A cleaner way: The "tool" logic itself (generating SQL) is an LLM call.
+            # The "execution" is a DB call.
+            # If we want to trace the LLM call, we strictly need to await it or use a sync version.
+            # tracing.traced_llm_call IS async def.
+            
+            # Let's try to run it on the current loop if available.
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    # We are in an async loop (tool_caller_node -> traced_tool_call -> this).
+                    # But traced_tool_call did not await this function.
+                    # It just called it: output = tool_callable(...)
+                    # If this function was async, it would return a coroutine, which traced_tool_call would store as output.
+                    # That would be bad.
+                    
+                    # Workaround: Use a blocking LLM call here wrapped in manual trace event creation.
+                    # Since we can't easily await inside a sync tool function called by a sync wrapper.
+                    
+                    # Manual tracing for sync context:
+                    import time
+                    start_t = time.time()
+                    response = llm.invoke(messages)
+                    end_t = time.time()
+                    
+                    # Extract tokens manually (logic duplicated from traced_llm_call but simplified)
+                    prompt_tokens = None
+                    completion_tokens = None
+                    total_tokens = None
+                    if hasattr(response, 'usage_metadata') and response.usage_metadata:
+                         if isinstance(response.usage_metadata, dict):
+                            prompt_tokens = response.usage_metadata.get('input_tokens')
+                            completion_tokens = response.usage_metadata.get('output_tokens')
+                            total_tokens = response.usage_metadata.get('total_tokens')
+                    
+                    # Create trace event
+                    from agent.tracing import create_trace_event
+                    create_trace_event(
+                        node_name="sql_tool_gen",
+                        event_type="llm_call",
+                        state=state,
+                        input_data=str(messages)[:2000],
+                        output_data=str(response.content)[:2000],
+                        prompt_tokens=prompt_tokens,
+                        completion_tokens=completion_tokens,
+                        total_tokens=total_tokens,
+                        latency_ms=(end_t - start_t) * 1000,
+                        model_name=actual_model_name
+                    )
+                else:
+                    # Should not happen in this app structure
+                    response = llm.invoke(messages)
+            except RuntimeError:
+                 # No loop running?
+                 response = llm.invoke(messages)
+                 
+        else:
+            response = llm.invoke(messages)
+            
         sql_query = response.content.strip()
         
         # Remove markdown code blocks if present

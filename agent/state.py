@@ -15,6 +15,7 @@ class AgentConfig:
     judge_model: str = "gpt-4o-mini"
     use_compression: bool = False
     compression_strategy: str = "raw"  # "raw", "turn_summary", "phase_summary", "structured_json"
+    max_replans: int = 3  # Maximum number of replanning attempts allowed
 
 
 @dataclass
@@ -37,6 +38,7 @@ class TraceEvent:
     
     # Optional details
     tool_name: Optional[str] = None  # for tool calls
+    model_name: Optional[str] = None  # actual model used for LLM calls
     error: Optional[str] = None  # error message if any
 
 
@@ -58,6 +60,10 @@ class AgentState(TypedDict):
     sql_results: Optional[list]  # list of SQL query results: [{generated_sql, query_result, numeric_values, step_query}, ...]
     rag_docs: Optional[list]  # list of RAG document dicts
     api_results: Optional[list]  # list of API call results: [{tool, input, output}, ...]
+    plan_history: list[dict]  # snapshots of previous plans before replanning
+    feedback: Optional[str]  # feedback from planner to tool execution
+    is_ready_for_answer: bool  # signal from planner that enough info is gathered
+    replan_count: int  # count of replanning attempts
 
 
 def create_initial_state(user_query: str, config: Optional[AgentConfig] = None) -> AgentState:
@@ -76,6 +82,9 @@ def create_initial_state(user_query: str, config: Optional[AgentConfig] = None) 
     # Also set default model_name if not set
     config.model_name = os.getenv("DEFAULT_MODEL", config.model_name)
     
+    # Max replans
+    config.max_replans = int(os.getenv("MAX_REPLANS", config.max_replans))
+    
     return AgentState(
         user_query=user_query,
         plan=None,
@@ -92,6 +101,10 @@ def create_initial_state(user_query: str, config: Optional[AgentConfig] = None) 
         sql_results=None,
         rag_docs=None,
         api_results=None,
+        plan_history=[],
+        feedback=None,
+        is_ready_for_answer=False,
+        replan_count=0,
     )
 
 

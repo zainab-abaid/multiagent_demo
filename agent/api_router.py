@@ -3,10 +3,11 @@
 import json
 from typing import Any, Dict, List
 from langchain_core.messages import SystemMessage, HumanMessage
-from langchain.chat_models import init_chat_model
+from agent.llm_utils import init_llm
 from agent.tools_api_registry import API_TOOLS_REGISTRY
+from agent.tracing import traced_llm_call
 
-async def api_router_llm(user_query: str, state: Dict[str, Any]) -> List[Dict[str, Any]]:
+async def api_router_llm(user_query: str, state: Dict[str, Any], feedback: str = None) -> List[Dict[str, Any]]:
     """
     Given the user query and current state (including previous tool results),
     decide which API tools to call and with what parameters.
@@ -23,6 +24,9 @@ async def api_router_llm(user_query: str, state: Dict[str, Any]) -> List[Dict[st
     # Optionally give it a concise view of previous results.
     # Keep it very simple & textual to keep the prompt understandable.
     previous_summary = []
+    
+    if feedback:
+        previous_summary.append(f"PREVIOUS FEEDBACK/CRITIQUE: {feedback}")
     
     # Check sql_results list first (contains ALL SQL queries that were executed)
     sql_results = state.get("sql_results", [])
@@ -136,14 +140,21 @@ Decide which tools to call and with what arguments.
 Return ONLY JSON, no markdown, no comments."""
     
     model_name = state.get("config", {}).get("api_router_model") or "gpt-4o-mini"
-    llm = init_chat_model(model_name)
+    llm, actual_model_name = init_llm(model_name)
     
     messages = [
         SystemMessage(content=system_prompt),
         HumanMessage(content=user_prompt),
     ]
     
-    response = await llm.ainvoke(messages)
+    # Use traced_llm_call for observability
+    response = await traced_llm_call(
+        node_name="api_router",
+        state=state,
+        llm_callable=llm,
+        llm_input=messages,
+        model_name=actual_model_name
+    )
     text = response.content.strip()
     
     if text.startswith("```"):

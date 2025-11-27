@@ -1,23 +1,41 @@
 """Planner node for creating structured execution plans."""
 
 import json
+import copy
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain.chat_models import init_chat_model
-
 from agent.state import AgentState, build_memory_view
 from agent.tracing import traced_llm_call, create_trace_event
+from agent.llm_utils import init_llm
 
 
 async def planner_node(state: AgentState) -> AgentState:
     """
     Planner node: creates a structured plan from the user query.
     
-    Builds memory view, calls LLM to generate a plan, and stores it in state.plan.
+    Two modes:
+    1. Initial planning: Creates the first plan.
+    2. Replanning: Analyzes previous execution, adds correction steps if needed.
     """
+    # Check if we are replanning (plan already exists)
+    is_replanning = state.get("plan") is not None and "steps" in state.get("plan", {})
+    
     # Build memory view for context
     memory_view = build_memory_view(state)
     
-    # System prompt for plan generation
+    # Initialize LLM
+    import os
+    config = state.get("config", {})
+    model_name = config.get("planner_model") or os.getenv("PLANNER_MODEL") or config.get("model_name", "gpt-4o-mini")
+    llm, actual_model_name = init_llm(model_name)
+    
+    if is_replanning:
+        return await _replan(state, llm, memory_view, actual_model_name)
+    else:
+        return await _initial_plan(state, llm, memory_view, actual_model_name)
+
+
+async def _initial_plan(state: AgentState, llm, memory_view: str, model_name: str) -> AgentState:
+    """Generate the initial plan."""
     system_prompt = """You are a planning assistant that breaks down user queries into structured execution plans.
 
 Given a user query and the conversation history, create a step-by-step plan to answer it.
@@ -107,12 +125,6 @@ Conversation history:
 Create a plan to answer the user's query. Output the JSON plan."""
 
     try:
-        # Initialize LLM (use planner_model from config, fallback to env, then default)
-        import os
-        config = state.get("config", {})
-        model_name = config.get("planner_model") or os.getenv("PLANNER_MODEL") or config.get("model_name", "gpt-4o-mini")
-        llm = init_chat_model(model_name)
-        
         # Prepare messages
         messages = [
             SystemMessage(content=system_prompt),
@@ -124,7 +136,8 @@ Create a plan to answer the user's query. Output the JSON plan."""
             node_name="planner",
             state=state,
             llm_callable=llm,
-            llm_input=messages
+            llm_input=messages,
+            model_name=model_name
         )
         
         # Parse the plan from response
@@ -149,6 +162,7 @@ Create a plan to answer the user's query. Output the JSON plan."""
         # Store plan and reset cursor
         state["plan"] = plan
         state["step_cursor"] = 0
+        state["is_ready_for_answer"] = False  # Reset readiness
         
         # Log plan update
         create_trace_event(
@@ -184,3 +198,125 @@ Create a plan to answer the user's query. Output the JSON plan."""
     
     return state
 
+
+async def _replan(state: AgentState, llm, memory_view: str, model_name: str) -> AgentState:
+    """Analyze execution and update plan if needed."""
+    
+    # Increment replan count
+    state["replan_count"] = state.get("replan_count", 0) + 1
+    
+    system_prompt = """You are a sophisticated planning assistant that reviews agent execution.
+    
+Your goal is to check if the current plan execution has gathered enough correct information to answer the user's query.
+
+Review the:
+1. User Query
+2. Execution History (tool inputs/outputs/errors)
+3. Current Plan
+
+Decide:
+- Is the information sufficient and correct?
+- Did any tool call fail or return incorrect data?
+- Do we need to add new steps to fix errors or get missing info?
+
+Output a JSON object:
+{
+  "is_ready_for_answer": boolean,
+  "reasoning": "Explanation of your decision",
+  "feedback": "Critique or feedback for the next tool execution (if needed), e.g., 'The last SQL query failed because table X doesn't exist'",
+  "new_steps": [
+    // Optional: Only include if is_ready_for_answer is false
+    {
+      "id": 1,
+      "description": "Fix step description",
+      "action_type": "tool_call",
+      "tool": "...",
+      "query": "..."
+    }
+  ]
+}
+
+If "is_ready_for_answer" is true, "new_steps" should be empty.
+If "is_ready_for_answer" is false, provide "new_steps" to append to the plan.
+The "feedback" field is crucial for helping downstream tools correct their mistakes.
+"""
+
+    user_prompt = f"""User query: {state["user_query"]}
+
+Current Plan Status:
+{json.dumps(state["plan"], indent=2)}
+
+Execution History:
+{memory_view}
+
+Analyze the execution. Are we ready to answer? If not, provide new steps and feedback."""
+
+    try:
+        messages = [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=user_prompt)
+        ]
+        
+        response = await traced_llm_call(
+            node_name="planner_replan",
+            state=state,
+            llm_callable=llm,
+            llm_input=messages,
+            model_name=model_name
+        )
+        
+        result_text = response.content.strip()
+        if result_text.startswith("```"):
+            lines = result_text.split("\n")
+            result_text = "\n".join(lines[1:-1]) if len(lines) > 2 else result_text
+            result_text = result_text.replace("```json", "").replace("```", "").strip()
+            
+        result = json.loads(result_text)
+        
+        is_ready = result.get("is_ready_for_answer", False)
+        new_steps = result.get("new_steps", [])
+        feedback = result.get("feedback", "")
+        
+        state["is_ready_for_answer"] = is_ready
+        state["feedback"] = feedback
+        
+        if not is_ready and new_steps:
+            # Snapshot current plan
+            current_plan = copy.deepcopy(state["plan"])
+            state.setdefault("plan_history", []).append(current_plan)
+            
+            # Append new steps
+            # Ensure IDs are unique/sequential based on previous last step
+            last_id = 0
+            if state["plan"]["steps"]:
+                last_step = state["plan"]["steps"][-1]
+                last_id = last_step.get("id", 0)
+                if isinstance(last_id, str): # Handle string ids if present
+                     try: last_id = int(last_id)
+                     except: last_id = 0
+
+            for i, step in enumerate(new_steps):
+                step["id"] = last_id + i + 1
+                state["plan"]["steps"].append(step)
+            
+            # Note: step_cursor stays where it was (pointing to end of old list, which is start of new steps)
+            
+        create_trace_event(
+            node_name="planner_replan",
+            event_type="replan",
+            state=state,
+            input_data={"memory_view": memory_view},
+            output_data={"is_ready": is_ready, "new_steps_count": len(new_steps), "feedback": feedback},
+        )
+
+    except Exception as e:
+        # Fallback: assume ready to answer to prevent infinite loops on error
+        state["is_ready_for_answer"] = True
+        create_trace_event(
+            node_name="planner_replan",
+            event_type="error",
+            state=state,
+            error=str(e)
+        )
+
+    return state

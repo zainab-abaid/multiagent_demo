@@ -53,6 +53,7 @@ def build_agent_graph() -> Any:
         route_controller,  # routing function (separate from the node)
         {
             "tool_caller": "tool_caller",
+            "planner": "planner",  # Loop back to planner for re-evaluation
             "answer": "answer",
             "end": END,
         }

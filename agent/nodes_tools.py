@@ -35,16 +35,28 @@ async def tool_caller_node(state: AgentState) -> AgentState:
     tool_result = None
     
     try:
+        feedback = state.get("feedback")
+        
         if tool_name == "sql_tool":
             # Use step-specific query if provided, otherwise fall back to user_query
             step_query = step.get("query") or state["user_query"]
-            tool_input = {"natural_language_query": step_query}
+            # Create tool_input WITH state for the callable, but create clean copy for logging
+            tool_input_with_state = {
+                "natural_language_query": step_query, 
+                "state": state,  # Pass state for tracing inside the tool
+                "feedback": feedback
+            }
+            # Create clean copy without state for logging (to avoid circular reference)
+            tool_input_clean = {
+                "natural_language_query": step_query,
+                "feedback": feedback
+            }
             tool_result = traced_tool_call(
                 node_name="tool_caller",
                 state=state,
                 tool_name="sql_tool",
                 tool_callable=sql_tool_nl_to_sql,
-                tool_input=tool_input,
+                tool_input=tool_input_with_state,
             )
             # optional convenience view for downstream
             numeric_vals = tool_result.get("numeric_values")
@@ -67,12 +79,12 @@ async def tool_caller_node(state: AgentState) -> AgentState:
                 state["sql_results"] = []
             state["sql_results"].append(sql_query_result)
             
-            # log entry
+            # log entry - use clean copy without state to avoid circular reference
             state.setdefault("tool_results", []).append(
                 {
                     "step_id": step_id,
                     "tool_name": "sql_tool",
-                    "raw_input": tool_input,
+                    "raw_input": tool_input_clean,
                     "raw_output": tool_result,
                 }
             )
@@ -102,7 +114,7 @@ async def tool_caller_node(state: AgentState) -> AgentState:
             
         elif tool_name == "api_tool":
             # 1) Ask router LLM which concrete API tools to call
-            api_calls = await api_router_llm(state["user_query"], state)
+            api_calls = await api_router_llm(state["user_query"], state, feedback=feedback)
             api_call_results = []
             for call in api_calls:
                 registry_name = call["tool"]

@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional, List
 from dotenv import load_dotenv
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain.chat_models import init_chat_model
+from agent.llm_utils import init_llm
 
 from agent.graph import build_agent_graph
 from agent.state import create_initial_state, AgentConfig
@@ -726,10 +726,12 @@ async def evaluate_simplified(
     answer_match_score = answer_score_result["score"]
     component_feedback = answer_score_result.get("component_feedback", [])
     
-    # 3. Check plan correctness
-    plan = final_state.get("plan")
+    # 3. Check plan correctness (use initial plan if available)
+    plan_history = final_state.get("plan_history", [])
+    initial_plan = plan_history[0] if plan_history else final_state.get("plan")
+    
     expected_plan = expected_tool_calls.get("expected_plan")
-    plan_check = await check_plan_correctness(plan, expected_plan, judge_llm)
+    plan_check = await check_plan_correctness(initial_plan, expected_plan, judge_llm)
     
     # 4. Check tool calls
     sql_results = final_state.get("sql_results")
@@ -743,7 +745,10 @@ async def evaluate_simplified(
     # 5. Compute tool call correctness score
     tool_call_correctness = _compute_tool_call_correctness(sql_check, rag_check, api_check)
     
-    # 6. Calculate overall_score as average of all component scores
+    # 6. Report replanning stats
+    replan_count = final_state.get("replan_count", 0)
+    
+    # 7. Calculate overall_score as average of all component scores
     overall_score = (answer_match_score + plan_check["score"] + tool_call_correctness) / 3.0
     
     return {
@@ -751,6 +756,7 @@ async def evaluate_simplified(
         "answer_match_score": answer_match_score,
         "plan_correctness": plan_check["score"],
         "tool_call_correctness": tool_call_correctness,
+        "replan_count": replan_count,
         "extracted": extracted,
         "plan_check": plan_check,
         "component_feedback": component_feedback,
@@ -977,6 +983,10 @@ def _print_evaluation_summary(eval_data: Dict[str, Any]) -> None:
     # Tool call correctness
     print(f"  Tool Call Correctness: {eval_data.get('tool_call_correctness', 0):.2f}/1.00")
     
+    # Replan count
+    replan_count = eval_data.get("replan_count", 0)
+    print(f"  Replan Count: {replan_count}")
+    
     # Individual tool checks
     tool_checks = eval_data.get("tool_checks", {})
     if tool_checks:
@@ -1127,7 +1137,7 @@ async def main():
     import os
     judge_model = os.getenv("JUDGE_MODEL", "gpt-4o-mini")
     print(f"\nInitializing judge LLM: {judge_model}")
-    judge_llm = init_chat_model(judge_model)
+    judge_llm, _ = init_llm(judge_model)  # Model name not needed for judge
     
     # Build agent graph
     print("Building agent graph...")
@@ -1183,16 +1193,19 @@ def _compute_summary_stats(
         "results": results,
         "summary_stats": {
             "average_overall_score": sum(
-                r.get("judge_evaluation", {}).get("overall_score", 0.0) for r in valid_results
+                (r.get("judge_evaluation") or {}).get("overall_score", 0.0) for r in valid_results
             ) / num_valid if num_valid > 0 else 0.0,
             "average_answer_match_score": sum(
-                r.get("judge_evaluation", {}).get("answer_match_score", 0.0) for r in valid_results
+                (r.get("judge_evaluation") or {}).get("answer_match_score", 0.0) for r in valid_results
             ) / num_valid if num_valid > 0 else 0.0,
             "average_tool_call_correctness": sum(
-                r.get("judge_evaluation", {}).get("tool_call_correctness", 0.0) for r in valid_results
+                (r.get("judge_evaluation") or {}).get("tool_call_correctness", 0.0) for r in valid_results
             ) / num_valid if num_valid > 0 else 0.0,
             "average_plan_correctness": sum(
-                r.get("judge_evaluation", {}).get("plan_correctness", 0.0) for r in valid_results
+                (r.get("judge_evaluation") or {}).get("plan_correctness", 0.0) for r in valid_results
+            ) / num_valid if num_valid > 0 else 0.0,
+            "average_replans": sum(
+                (r.get("judge_evaluation") or {}).get("replan_count", 0) for r in valid_results
             ) / num_valid if num_valid > 0 else 0.0,
             "queries_with_errors": sum(1 for r in results if r and r.get("error")),
         }
@@ -1218,6 +1231,7 @@ def _print_final_summary(summary: Dict[str, Any], session_dir: Path, elapsed_tim
     print(f"Average Answer Match Score: {stats['average_answer_match_score']:.2f}/1.00")
     print(f"Average Plan Correctness: {stats['average_plan_correctness']:.2f}/1.00")
     print(f"Average Tool Call Correctness: {stats['average_tool_call_correctness']:.2f}/1.00")
+    print(f"Average Replans: {stats['average_replans']:.2f}")
     print(f"Errors: {stats['queries_with_errors']}")
     print(f"\nResults saved to: {session_dir}")
     print(f"Summary: {session_dir / 'summary.json'}")

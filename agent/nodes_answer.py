@@ -3,7 +3,7 @@
 """Answer generation node."""
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain.chat_models import init_chat_model
+from agent.llm_utils import init_llm
 
 from agent.state import AgentState, build_memory_view
 from agent.tracing import traced_llm_call
@@ -145,7 +145,7 @@ Write the final answer to the user, following the system instructions above."""
             or config.get("model_name")
             or "gpt-4o-mini"
         )
-        llm = init_chat_model(model_name)
+        llm, actual_model_name = init_llm(model_name)
 
         messages = [
             SystemMessage(content=system_prompt),
@@ -158,6 +158,7 @@ Write the final answer to the user, following the system instructions above."""
             state=state,
             llm_callable=llm,
             llm_input=messages,
+            model_name=actual_model_name
         )
 
         state["answer_draft"] = response.content.strip()
