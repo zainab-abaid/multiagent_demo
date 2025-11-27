@@ -1,0 +1,202 @@
+"""Tracing utilities for LLM and tool calls."""
+
+import time
+import uuid
+from typing import Any, Callable
+from agent.state import AgentState, TraceEvent, event_to_dict
+
+
+def create_trace_event(
+    node_name: str,
+    event_type: str,
+    state: AgentState,
+    input_data: dict | str | None = None,
+    output_data: dict | str | None = None,
+    prompt_tokens: int | None = None,
+    completion_tokens: int | None = None,
+    total_tokens: int | None = None,
+    latency_ms: float | None = None,
+    tool_name: str | None = None,
+    error: str | None = None,
+) -> dict:
+    """Create a TraceEvent and append it to state.trajectory."""
+    event = TraceEvent(
+        event_id=str(uuid.uuid4()),
+        timestamp=time.time(),
+        node_name=node_name,
+        event_type=event_type,
+        input=input_data,
+        output=output_data,
+        prompt_tokens=prompt_tokens,
+        completion_tokens=completion_tokens,
+        total_tokens=total_tokens,
+        latency_ms=latency_ms,
+        tool_name=tool_name,
+        error=error,
+    )
+    event_dict = event_to_dict(event)
+    if "trajectory" not in state:
+        state["trajectory"] = []
+    state["trajectory"].append(event_dict)
+    return event_dict
+
+
+async def traced_llm_call(
+    node_name: str,
+    state: AgentState,
+    llm_callable: Callable[..., Any],
+    llm_input: dict | str,
+    **kwargs
+) -> Any:
+    """
+    Call the given llm_callable, measure latency and token usage (if available),
+    append a TraceEvent to state.trajectory, and return the output.
+    """
+    start_time = time.time()
+    error = None
+    output = None
+    prompt_tokens = None
+    completion_tokens = None
+    total_tokens = None
+    
+    try:
+        # Call the LLM
+        # llm_input should be a list of messages or a single message
+        if isinstance(llm_input, list):
+            response = llm_callable.invoke(llm_input)
+        elif isinstance(llm_input, dict):
+            response = llm_callable.invoke(**llm_input, **kwargs)
+        else:
+            response = llm_callable.invoke(llm_input, **kwargs)
+        
+        output = response
+        
+        # Extract token counts from response
+        # LangChain responses have usage_metadata as a dict-like object
+        if hasattr(response, 'usage_metadata') and response.usage_metadata:
+            # usage_metadata can be a dict or an object with attributes
+            if isinstance(response.usage_metadata, dict):
+                prompt_tokens = response.usage_metadata.get('input_tokens')
+                completion_tokens = response.usage_metadata.get('output_tokens')
+                total_tokens = response.usage_metadata.get('total_tokens')
+            else:
+                # Try as attributes
+                prompt_tokens = getattr(response.usage_metadata, 'input_tokens', None) or getattr(response.usage_metadata, 'prompt_tokens', None)
+                completion_tokens = getattr(response.usage_metadata, 'output_tokens', None) or getattr(response.usage_metadata, 'completion_tokens', None)
+                total_tokens = getattr(response.usage_metadata, 'total_tokens', None)
+        
+        # Also check response_metadata as fallback
+        if (prompt_tokens is None or completion_tokens is None or total_tokens is None) and hasattr(response, 'response_metadata'):
+            metadata = response.response_metadata
+            if metadata:
+                token_usage = metadata.get('token_usage', {})
+                if token_usage:
+                    prompt_tokens = prompt_tokens or token_usage.get('prompt_tokens') or token_usage.get('input_tokens')
+                    completion_tokens = completion_tokens or token_usage.get('completion_tokens') or token_usage.get('output_tokens')
+                    total_tokens = total_tokens or token_usage.get('total_tokens')
+            
+    except Exception as e:
+        error = str(e)
+        raise
+    finally:
+        end_time = time.time()
+        latency_ms = (end_time - start_time) * 1000
+        
+        # Prepare input/output for logging (truncate if too long, but preserve structure)
+        # For LLM calls, truncate more generously for prompts, but keep full response summary
+        if isinstance(llm_input, list):
+            # For message lists, show first and last messages fully, truncate middle
+            if len(llm_input) <= 2:
+                input_str = str(llm_input)
+            else:
+                input_str = f"[{llm_input[0]}, ... ({len(llm_input)-2} messages) ..., {llm_input[-1]}]"
+            # Limit to 3000 chars for input
+            if len(input_str) > 3000:
+                input_str = input_str[:3000] + "... (truncated)"
+        else:
+            input_str = str(llm_input)[:2000] if llm_input else None
+        
+        # For output, show more (up to 2000 chars) since it's the response
+        output_str = str(output)[:2000] if output else None
+        
+        create_trace_event(
+            node_name=node_name,
+            event_type="llm_call",
+            state=state,
+            input_data=input_str,
+            output_data=output_str,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            total_tokens=total_tokens,
+            latency_ms=latency_ms,
+            error=error,
+        )
+    
+    return output
+
+
+def traced_tool_call(
+    node_name: str,
+    state: AgentState,
+    tool_name: str,
+    tool_callable: Callable[..., Any],
+    tool_input: dict | str | None = None,
+    **kwargs
+) -> Any:
+    """
+    Call the given tool, measure latency, append a TraceEvent, and return the output.
+    """
+    start_time = time.time()
+    error = None
+    output = None
+    
+    try:
+        # Call the tool
+        if isinstance(tool_input, dict):
+            output = tool_callable(**tool_input, **kwargs)
+        elif tool_input is not None:
+            output = tool_callable(tool_input, **kwargs)
+        else:
+            output = tool_callable(**kwargs)
+            
+    except Exception as e:
+        error = str(e)
+        raise
+    finally:
+        end_time = time.time()
+        latency_ms = (end_time - start_time) * 1000
+        
+        # Prepare input/output for logging
+        # For tool calls, especially SQL, we need more space to see full results
+        input_str = str(tool_input)[:2000] if tool_input else None
+        
+        # For output, preserve full structure for SQL results
+        if tool_name == "sql_tool" and isinstance(output, dict):
+            # For SQL, show the full structure but format it nicely
+            import json
+            try:
+                # Create a summary that includes key fields
+                sql_summary = {
+                    "generated_sql": output.get("generated_sql", "")[:500],  # SQL query can be truncated
+                    "query_result": output.get("query_result", output.get("execution_result", {}).get("result", ""))[:1000],  # But result should be visible
+                    "success": output.get("success", True),
+                }
+                output_str = json.dumps(sql_summary, indent=2)[:3000]  # Up to 3000 chars
+            except:
+                output_str = str(output)[:3000]
+        else:
+            output_str = str(output)[:3000] if output else None
+        
+        create_trace_event(
+            node_name=node_name,
+            event_type="tool_call",
+            state=state,
+            input_data=input_str,
+            output_data=output_str,
+            latency_ms=latency_ms,
+            tool_name=tool_name,
+            error=error,
+        )
+    
+    return output
+

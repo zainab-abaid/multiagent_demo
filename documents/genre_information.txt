@@ -1,0 +1,24 @@
+Music Genres at Chinook Store
+
+The Chinook Music Store offers tracks across 25 different genres, catering to diverse musical tastes.
+
+Popular Genres Include:
+- Rock: The most popular genre with hundreds of tracks
+- Latin: Features music from Latin American artists
+- Metal: Heavy metal and hard rock tracks
+- Alternative: Alternative rock and indie music
+- Jazz: Classic and modern jazz recordings
+- Blues: Traditional and contemporary blues
+- Classical: Orchestral and chamber music
+- Country: Country and western music
+- Pop: Popular music and top 40 hits
+- R&B/Soul: Rhythm and blues and soul music
+
+Genre Statistics:
+- The store maintains a balanced catalog across all genres
+- Rock and Pop genres typically have the highest sales volumes
+- Latin music has seen significant growth in recent years, especially in 2013
+- Classical and Jazz genres have a dedicated customer base
+
+The store tracks sales by genre to understand customer preferences and optimize inventory. Genre information is used for recommendations and marketing campaigns.
+

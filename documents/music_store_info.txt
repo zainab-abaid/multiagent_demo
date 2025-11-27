@@ -1,0 +1,17 @@
+Chinook Music Store - Company Information
+
+The Chinook Music Store is a digital music retailer that has been operating since 2009. The store specializes in selling digital music tracks and albums from various artists across multiple genres.
+
+Key Business Information:
+- Founded: 2009
+- Business Type: Digital Music Retailer
+- Primary Products: Digital music tracks and albums
+- Customer Base: Global, with customers from over 20 countries
+- Revenue Model: Per-track and per-album sales
+
+The store maintains a comprehensive database of artists, albums, tracks, genres, customers, and sales transactions. All sales are recorded in the invoice system, which tracks customer purchases, invoice dates, and total amounts.
+
+The store uses a standard pricing model where individual tracks are typically priced around $0.99 to $1.99, with album purchases offering slight discounts. The store processes payments in USD (US Dollars) as the base currency.
+
+For international customers, currency conversion is handled at the point of sale. The store accepts payments in multiple currencies including EUR (Euros), GBP (British Pounds), JPY (Japanese Yen), CAD (Canadian Dollars), and AUD (Australian Dollars), with conversion rates updated daily based on market rates.
+
