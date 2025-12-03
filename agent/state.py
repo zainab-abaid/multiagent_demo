@@ -57,7 +57,7 @@ class AgentState(TypedDict):
     latest_result: Optional[dict | str]  # store latest tool result for convenience
     tool_results: list[dict]  # structured list of tool execution results
     reflection: Optional[dict]  # structured reflection output for replanning
-    sql_results: Optional[list]  # list of SQL query results: [{generated_sql, query_result, numeric_values, step_query}, ...]
+    sql_results: Optional[list]  # list of SQL query results: [{generated_sql, query_result, step_query}, ...]
     rag_docs: Optional[list]  # list of RAG document dicts
     api_results: Optional[list]  # list of API call results: [{tool, input, output}, ...]
     plan_history: list[dict]  # snapshots of previous plans before replanning

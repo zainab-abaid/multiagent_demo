@@ -1,0 +1,708 @@
+Chinook Music Store - Customer Service Policy and Procedures Manual
+
+================================================================================
+SECTION 1: CUSTOMER SERVICE PHILOSOPHY
+================================================================================
+
+Service Mission:
+"To provide exceptional, empathetic, and efficient support that enhances every customer's music discovery and purchasing experience."
+
+Core Service Values:
+1. Customer First: Every decision prioritizes customer satisfaction
+2. Quick Resolution: Aim to resolve issues in first contact
+3. Empathy: Understand and acknowledge customer frustrations
+4. Expertise: Deep knowledge of products and policies
+5. Proactivity: Anticipate needs and prevent issues
+6. Consistency: Uniform experience across all channels
+
+Service Level Agreements (SLAs):
+
+Email Support:
+- First response: Within 4 hours (business hours)
+- Resolution target: Within 24 hours
+- Complex issues: Within 72 hours
+- Escalation threshold: 48 hours without resolution
+
+Live Chat:
+- Initial response: Within 30 seconds
+- Average handle time target: 8 minutes
+- Customer satisfaction target: 90%+
+- Availability: 24/7
+
+Phone Support:
+- Answer time: Within 60 seconds
+- Average handle time: 12 minutes
+- First call resolution target: 85%
+- Hours: 8am-8pm PST, Monday-Friday
+- Weekend hours: 10am-6pm PST
+
+Social Media:
+- Response time: Within 2 hours
+- Public resolution: When appropriate
+- Escalation to private: Sensitive issues
+- Monitoring: 24/7
+
+================================================================================
+SECTION 2: CONTACT CHANNELS AND PROCEDURES
+================================================================================
+
+Email Support (support@chinookmusic.com):
+
+Categories and Routing:
+- Account Issues: Password resets, login problems, profile updates
+- Purchase Problems: Failed payments, missing orders, refund requests
+- Technical Support: Download issues, playback problems, app bugs
+- Content Questions: Song availability, catalog inquiries, metadata errors
+- Billing Inquiries: Charges, subscriptions, payment methods
+- General Feedback: Suggestions, complaints, compliments
+
+Email Response Template Structure:
+1. Personalized greeting (use customer name)
+2. Acknowledge the issue/question
+3. Provide solution or explanation
+4. Include relevant links/resources
+5. Offer additional assistance
+6. Professional closing
+
+Auto-Response System:
+- Immediate acknowledgment sent
+- Case number assigned
+- Expected response time provided
+- Self-help resources included
+
+Live Chat Support:
+
+Availability:
+- 24/7 coverage with global team
+- Peak hours: Additional staffing 5pm-10pm PST
+- Languages: English (24/7), Spanish (8am-8pm PST), Portuguese (8am-8pm BRT)
+
+Chat Procedures:
+1. Greeting within 30 seconds
+2. Verify customer identity (email or order number)
+3. Understand issue completely before responding
+4. Use canned responses for common issues (personalize)
+5. Provide step-by-step guidance
+6. Confirm resolution before closing
+7. Offer additional assistance
+8. Send chat transcript via email
+
+Escalation Triggers:
+- Customer requests supervisor
+- Issue unresolved after 15 minutes
+- Technical issue beyond agent scope
+- Refund over $50 required
+- Legal or security concerns
+
+Phone Support (1-800-CHINOOK):
+
+IVR Menu Structure:
+1. Account and Login Issues
+2. Purchase and Order Status
+3. Technical Support
+4. Billing and Subscriptions
+5. Artist Services (press 5)
+6. Business Accounts (press 6)
+0. Speak to representative
+
+Call Handling Procedures:
+1. Answer with: "Thank you for calling Chinook Music, this is [Name], how may I help you?"
+2. Verify identity: Request email address or order number
+3. Listen actively to customer concern
+4. Summarize issue back to customer
+5. Resolve or escalate appropriately
+6. Document call in CRM
+7. Close with: "Is there anything else I can help you with today?"
+
+Call Recording:
+- All calls recorded for quality and training
+- Customer notified at start of call
+- Recordings retained for 90 days
+- Available for dispute resolution
+
+Social Media Support:
+
+Monitored Platforms:
+- Twitter/X: @ChinookSupport (dedicated support handle)
+- Facebook: Facebook.com/ChinookMusicStore
+- Instagram: @chinookmusic (DMs only for support)
+- Reddit: r/ChinookMusic (community managed)
+
+Response Guidelines:
+- Public responses: General information only
+- Private conversation: Account-specific issues
+- Never share personal information publicly
+- Maintain professional tone
+- Acknowledge frustration, offer solutions
+
+Escalation Matrix:
+
+Level 1 - Frontline Support:
+- Password resets
+- Basic account questions
+- Download instructions
+- Order status inquiries
+- Simple refund requests (under $25)
+
+Level 2 - Senior Support:
+- Complex technical issues
+- Refunds $25-$100
+- Subscription disputes
+- Multi-issue cases
+- Repeat contact issues
+
+Level 3 - Supervisor/Team Lead:
+- Refunds over $100
+- Legal concerns
+- Security breaches
+- Persistent complaints
+- VIP customer issues
+
+Level 4 - Management:
+- PR-sensitive issues
+- Potential legal action
+- Executive escalations
+- Policy exceptions
+- Cross-department issues
+
+================================================================================
+SECTION 3: COMMON ISSUES AND RESOLUTIONS
+================================================================================
+
+Account Issues:
+
+Issue: Forgot Password
+Resolution:
+1. Direct to password reset page
+2. Verify email on file
+3. Send reset link (expires 24 hours)
+4. If email inaccessible, verify identity via purchase history
+5. Manual reset with supervisor approval
+
+Issue: Account Locked
+Causes: Multiple failed logins, suspicious activity, payment issues
+Resolution:
+1. Verify customer identity
+2. Check security alerts in system
+3. Clear security flags if appropriate
+4. Reset password
+5. Enable two-factor authentication (recommend)
+
+Issue: Email Change Request
+Resolution:
+1. Verify current account ownership
+2. Require current password confirmation
+3. Send confirmation to both old and new email
+4. 48-hour waiting period for security
+5. Update complete after both confirmations
+
+Issue: Account Deletion Request
+Resolution:
+1. Explain data retention requirements (30 days)
+2. Offer account deactivation alternative
+3. Process GDPR/CCPA requests within 30 days
+4. Confirm deletion via email
+5. Note: Purchase history retained for legal requirements
+
+Purchase Issues:
+
+Issue: Download Failed/Incomplete
+Resolution:
+1. Check download history in account
+2. Verify internet connection
+3. Try alternative download method (web vs app)
+4. Generate new download link
+5. If persistent, credit account and advise re-purchase
+
+Issue: Wrong Song/Album Delivered
+Resolution:
+1. Verify order details
+2. Compare with delivered content
+3. If error confirmed, provide correct content
+4. Full refund of incorrect item
+5. Investigate and report to content team
+
+Issue: Missing Purchase in Library
+Resolution:
+1. Confirm purchase in order history
+2. Check all account libraries (purchased vs wishlist)
+3. Verify account logged in correctly
+4. Force sync of library
+5. If still missing, re-grant access manually
+
+Issue: Charged But No Content
+Resolution:
+1. Verify charge with order number
+2. Check payment status (pending vs completed)
+3. If completed, grant access immediately
+4. If payment failed, explain and assist with retry
+5. Refund if unable to deliver
+
+Technical Issues:
+
+Issue: App Won't Open/Crashes
+Resolution:
+1. Identify device and OS version
+2. Recommend app update if available
+3. Clear cache and data
+4. Reinstall app
+5. Report bug to development team
+6. Offer web alternative while investigating
+
+Issue: Audio Quality Problems
+Resolution:
+1. Verify download quality setting
+2. Check file integrity
+3. Test on different device/player
+4. Re-download in different format
+5. If file confirmed defective, replace and report
+
+Issue: Syncing Issues Across Devices
+Resolution:
+1. Verify same account on all devices
+2. Check internet connectivity
+3. Force sync from account settings
+4. Log out and back in
+5. Wait 15 minutes for propagation
+
+Issue: Payment Method Not Accepted
+Resolution:
+1. Verify card details entered correctly
+2. Check card expiration
+3. Confirm billing address matches
+4. Suggest alternative payment method
+5. Contact bank if card is valid but declined
+
+Billing Issues:
+
+Issue: Unexpected Charge
+Resolution:
+1. Pull up complete billing history
+2. Identify charge (subscription renewal, pending order)
+3. Explain charge clearly
+4. If unauthorized, process refund
+5. Review account security
+
+Issue: Double Charged
+Resolution:
+1. Verify both charges in system
+2. If duplicate, refund immediately
+3. If different orders, clarify
+4. Apologize for confusion
+5. Document for fraud prevention
+
+Issue: Subscription Cancellation
+Resolution:
+1. Process cancellation request
+2. Explain access remains until period end
+3. Offer alternative plans if retention approved
+4. Confirm via email
+5. Process any applicable refund
+
+================================================================================
+SECTION 4: SPECIAL CUSTOMER HANDLING
+================================================================================
+
+VIP Customers (Platinum Loyalty Members):
+
+Identification:
+- Platinum badge visible in account
+- 1000+ lifetime purchases
+- Special queue routing
+
+Service Standards:
+- Priority queue (answer within 30 seconds)
+- Dedicated support team
+- Extended return/refund policies
+- Direct escalation to management
+- Proactive outreach for issues
+
+New Customers (First 90 Days):
+
+Identification:
+- Account age under 90 days
+- "New Customer" flag in system
+
+Service Standards:
+- Extra patience and explanation
+- Guided walkthroughs
+- Follow-up satisfaction surveys
+- Escalate quickly if frustrated
+- First-time discount reminders
+
+Dissatisfied Customers:
+
+Recognition Signs:
+- ALL CAPS messages
+- Multiple contacts same issue
+- Threatening language
+- Social media complaints
+- Explicit frustration expressions
+
+Handling Procedures:
+1. Acknowledge frustration sincerely
+2. Apologize for experience (not fault)
+3. Focus on solution, not blame
+4. Offer concrete resolution
+5. Follow up within 24 hours
+6. Document thoroughly
+
+Recovery Options:
+- Account credit ($5-$25 based on severity)
+- Free track/album credit
+- Premium subscription trial
+- Priority support flag
+- Personal follow-up from supervisor
+
+Accessibility Accommodations:
+
+For Customers with Disabilities:
+- Extended time for live chat
+- Alternative communication methods
+- Screen reader compatibility support
+- Text relay service integration
+- Patience and clear communication
+
+International Customers:
+
+Language Support:
+- English: 24/7
+- Spanish: 8am-8pm PST
+- Portuguese: 8am-8pm BRT
+- French: 8am-6pm CET
+- German: 8am-6pm CET
+- Japanese: 9am-6pm JST
+
+Cultural Considerations:
+- Be aware of time zones
+- Understand local payment methods
+- Recognize regional pricing differences
+- Accommodate local holidays
+- Use simple, clear language
+
+================================================================================
+SECTION 5: QUALITY ASSURANCE
+================================================================================
+
+Monitoring and Evaluation:
+
+Call Quality Scoring:
+- Greeting and verification: 10 points
+- Issue understanding: 15 points
+- Resolution accuracy: 25 points
+- Communication clarity: 20 points
+- Professionalism: 15 points
+- Closing and documentation: 15 points
+- Total: 100 points
+- Minimum passing score: 80
+
+Chat Quality Scoring:
+- Response time: 10 points
+- Grammar and spelling: 15 points
+- Solution accuracy: 30 points
+- Tone and empathy: 20 points
+- Resource utilization: 10 points
+- Customer satisfaction: 15 points
+
+Email Quality Scoring:
+- Response time: 15 points
+- Completeness: 25 points
+- Accuracy: 25 points
+- Tone: 15 points
+- Formatting: 10 points
+- Follow-up appropriateness: 10 points
+
+Quality Review Frequency:
+- New agents: 100% review for first 30 days
+- Standard agents: 10% random sample weekly
+- Underperforming agents: 25% review
+- Top performers: 5% spot check
+
+Customer Satisfaction Measurement:
+
+Post-Interaction Surveys:
+- Sent after every chat and call
+- Email survey for email interactions
+- Rating: 1-5 stars
+- Optional comment field
+
+Net Promoter Score (NPS):
+- Quarterly survey to all customers
+- "How likely to recommend?" (0-10)
+- Target NPS: 50+
+- Current NPS: 62
+
+Customer Effort Score (CES):
+- "How easy was it to resolve your issue?" (1-7)
+- Target: 6.0 average
+- Current: 5.8
+
+Performance Metrics:
+
+Individual Agent Metrics:
+- First contact resolution rate
+- Average handle time
+- Customer satisfaction score
+- Quality assurance score
+- Attendance and adherence
+
+Team Metrics:
+- Service level (% answered within SLA)
+- Abandon rate
+- Backlog volume
+- Escalation rate
+- Customer satisfaction average
+
+Department Metrics:
+- Overall CSAT
+- NPS trend
+- Cost per contact
+- Employee satisfaction
+- Training completion rate
+
+================================================================================
+SECTION 6: TRAINING AND DEVELOPMENT
+================================================================================
+
+New Hire Training Program:
+
+Week 1: Foundation
+- Company history and values
+- Product knowledge basics
+- System navigation
+- Policy overview
+- Shadowing experienced agents
+
+Week 2: Core Skills
+- Communication techniques
+- Issue identification
+- Resolution procedures
+- Documentation standards
+- Practice scenarios
+
+Week 3: Supervised Practice
+- Handle simple issues with oversight
+- Real-time coaching
+- Graduated complexity
+- Quality feedback sessions
+
+Week 4: Nesting Period
+- Independent handling
+- Reduced queue
+- Available support
+- Daily debrief sessions
+
+Ongoing Training:
+
+Monthly Topics:
+- New feature releases
+- Policy updates
+- Advanced troubleshooting
+- Soft skills enhancement
+
+Quarterly Development:
+- Performance reviews
+- Career path discussions
+- Skill gap assessments
+- Cross-training opportunities
+
+Annual Requirements:
+- Product certification renewal
+- Compliance training
+- Security awareness
+- Customer service excellence course
+
+Career Progression:
+
+Path 1: Technical Specialist
+Support Agent → Senior Agent → Technical Specialist → Technical Lead
+
+Path 2: People Management
+Support Agent → Senior Agent → Team Lead → Support Manager → Director
+
+Path 3: Quality/Training
+Support Agent → Senior Agent → QA Analyst → Training Specialist → Training Manager
+
+================================================================================
+SECTION 7: TOOLS AND SYSTEMS
+================================================================================
+
+Customer Relationship Management (CRM):
+- Platform: Salesforce Service Cloud
+- Features: Case management, knowledge base, reporting
+- Integration: Purchase history, account data, communication history
+
+Help Desk System:
+- Platform: Zendesk
+- Features: Ticketing, routing, macros, analytics
+- Channels: Email, chat, social media integration
+
+Phone System:
+- Platform: Five9 Contact Center
+- Features: IVR, call routing, recording, analytics
+- Integration: CRM screen pop, click-to-dial
+
+Live Chat:
+- Platform: Intercom
+- Features: Chat bot, agent handoff, co-browsing
+- Analytics: Response time, satisfaction, conversion
+
+Knowledge Base:
+- Internal: Confluence
+- External: help.chinookmusic.com (Zendesk Guide)
+- Maintenance: Weekly review and updates
+
+Quality Management:
+- Platform: Playvox
+- Features: Evaluation forms, coaching, gamification
+- Reporting: Individual and team dashboards
+
+================================================================================
+SECTION 8: POLICIES AND COMPLIANCE
+================================================================================
+
+Data Privacy:
+
+Customer Data Access:
+- Need-to-know basis only
+- No sharing outside support context
+- No screenshots of customer data
+- Secure handling of payment info
+
+Data Requests:
+- GDPR Article 15 requests: 30-day response
+- CCPA requests: 45-day response
+- Data portability: Provide in machine-readable format
+- Right to deletion: Process within regulatory timeline
+
+Recording and Monitoring:
+- Customers notified of call recording
+- Chat logs retained 2 years
+- Email correspondence retained 7 years
+- Monitoring for quality and training disclosed
+
+Confidentiality:
+
+Employee Obligations:
+- Non-disclosure agreement signed
+- Customer data never discussed externally
+- No social media posts about specific cases
+- Secure workstation practices
+
+Breach Procedures:
+- Immediate report to supervisor
+- Security team notification
+- Customer notification if required
+- Documentation and investigation
+
+Anti-Fraud:
+
+Red Flags:
+- Multiple accounts same payment method
+- Unusual purchase patterns
+- Repeated chargebacks
+- Identity inconsistencies
+
+Procedures:
+- Flag account for review
+- Escalate to fraud team
+- No accusations to customer
+- Document thoroughly
+
+================================================================================
+SECTION 9: EMERGENCY PROCEDURES
+================================================================================
+
+System Outage:
+
+Detection:
+- Monitoring alerts
+- Spike in customer contacts
+- Social media reports
+
+Response:
+1. Confirm outage scope
+2. Notify management chain
+3. Post status page update
+4. Activate high-volume procedures
+5. Regular status updates (every 30 minutes)
+6. Post-incident communication to affected customers
+
+Agent Actions During Outage:
+- Acknowledge the issue
+- Provide status page link
+- Set realistic expectations
+- Document all affected customers
+- Follow up when resolved
+
+Security Incident:
+
+Types:
+- Data breach
+- Account compromise
+- Payment fraud
+- Phishing attempt
+
+Immediate Actions:
+1. Do not discuss details with customer
+2. Escalate to security team immediately
+3. Document everything
+4. Preserve evidence
+5. Follow security team instructions
+
+PR Crisis:
+
+Triggers:
+- Viral social media complaint
+- Media inquiry
+- Executive escalation
+- Legal threat
+
+Response:
+1. Escalate to PR team immediately
+2. Do not respond publicly
+3. Document all communications
+4. Prepare factual summary
+5. Await PR guidance
+
+================================================================================
+SECTION 10: CONTACT INFORMATION AND RESOURCES
+================================================================================
+
+Internal Contacts:
+
+Customer Service Management:
+- Director of Support: Maria Santos - maria.santos@chinookmusic.com
+- Support Manager (Americas): John Davis - john.davis@chinookmusic.com
+- Support Manager (EMEA): Emma Wilson - emma.wilson@chinookmusic.com
+- Support Manager (APAC): Yuki Tanaka - yuki.tanaka@chinookmusic.com
+
+Specialized Teams:
+- Technical Support Lead: Alex Chen - alex.chen@chinookmusic.com
+- Billing Team Lead: Rachel Green - rachel.green@chinookmusic.com
+- VIP Support: vip-support@chinookmusic.com
+- Fraud Team: fraud@chinookmusic.com
+- Security Team: security@chinookmusic.com
+
+External Resources:
+
+Customer Help Center: help.chinookmusic.com
+Status Page: status.chinookmusic.com
+Community Forum: community.chinookmusic.com
+API Documentation: developers.chinookmusic.com
+Artist Support: artists.chinookmusic.com/support
+
+Emergency Contacts:
+
+24/7 On-Call Manager: oncall-support@chinookmusic.com
+Security Hotline: 1-888-SEC-NOOK (1-888-732-6665)
+PR Emergency: pr-emergency@chinookmusic.com
+
+================================================================================
+
+Document Version: 3.8
+Last Updated: January 2024
+Next Review: April 2024
+Document Owner: Customer Service Department
+Classification: Internal Use Only
+

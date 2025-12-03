@@ -1,0 +1,761 @@
+Chinook Music Store - Complete Pricing, Currency, and Payment Policy Guide
+
+================================================================================
+SECTION 1: PRICING PHILOSOPHY AND OVERVIEW
+================================================================================
+
+Pricing Mission:
+Chinook Music Store is committed to fair, transparent, and accessible pricing that balances value for customers with fair compensation for artists and rights holders.
+
+Core Pricing Principles:
+1. Transparency: All prices clearly displayed with no hidden fees
+2. Fairness: Consistent pricing across similar products
+3. Artist Support: Pricing that enables sustainable artist royalties
+4. Global Access: Pricing adapted for different markets while maintaining fairness
+5. Quality Value: Premium pricing only for genuine quality improvements
+
+Pricing Governance:
+- Pricing Committee meets monthly to review and adjust prices
+- Annual comprehensive pricing review in January
+- Emergency pricing reviews as needed for market conditions
+- All pricing changes announced 30 days in advance
+
+================================================================================
+SECTION 2: TRACK PRICING STRUCTURE
+================================================================================
+
+Average Track Price:
+The store's average price per track across all categories is $1.05 USD. This average is calculated based on the weighted distribution of tracks across all pricing categories in the catalog.
+
+Standard Track Pricing:
+
+Base Price Categories:
+
+Category A - Standard Catalog ($0.99 USD)
+- Back catalog tracks (3+ years old)
+- Independent artist releases
+- Standard genre content
+- Re-releases and compilations
+- This represents approximately 75% of the catalog
+
+Category B - Current Releases ($1.29 USD)
+- New releases (within first 90 days)
+- Chart-performing tracks
+- Featured playlist content
+- Major artist new content
+- This represents approximately 15% of the catalog
+
+Category C - Premium Content ($1.49 USD)
+- Exclusive releases
+- Limited edition content
+- Live recordings
+- Rare and archival material
+- This represents approximately 7% of the catalog
+
+Category D - Ultra-Premium ($1.99 USD)
+- Masters quality tracks
+- Exclusive premieres
+- Special edition content
+- Collector's items
+- This represents approximately 3% of the catalog
+
+Average Price Calculation:
+Based on the catalog distribution across these categories, the weighted average price per track is $1.05 USD. This average accounts for the proportion of tracks in each pricing category and is used for estimating total values when calculating potential revenue or costs for large track collections.
+
+Price Transition Schedule:
+- New releases start at Category B or C
+- After 90 days: Evaluation for price reduction
+- After 180 days: Most tracks move to Category A
+- Evergreen content may remain at higher tiers longer
+
+Genre-Specific Pricing Adjustments:
+
+Classical Music:
+- Standard movements: $0.99
+- Complete symphonies (bundled): $0.79 per movement
+- Opera complete recordings: $0.89 per track
+- Rare archival recordings: $1.49
+
+Jazz:
+- Standard tracks: $0.99
+- Live recordings: $1.29
+- Bootleg/archival (licensed): $1.49
+- Complete session recordings: $0.89 per track
+
+Rock and Pop:
+- Standard tracks: $0.99
+- New releases: $1.29
+- Exclusive versions: $1.49
+- Demo recordings: $1.29
+
+Electronic/Dance:
+- Standard tracks: $0.99
+- Extended mixes (10+ minutes): $1.49
+- DJ edits: $0.99
+- Complete DJ sets: $2.99
+
+Latin Music:
+- Standard tracks: $0.99
+- Regional exclusives: $1.29
+- Live performances: $1.49
+
+Track Length Pricing Policy:
+- Tracks under 30 seconds: Free preview only, not for sale individually
+- 30 seconds - 10 minutes: Standard pricing applies
+- 10-20 minutes: 1.5x standard price
+- 20-40 minutes: 2x standard price
+- Over 40 minutes: Priced as EP/mini-album
+
+================================================================================
+SECTION 3: ALBUM PRICING STRUCTURE
+================================================================================
+
+Album Discount Tiers:
+
+Standard Albums (8-15 tracks):
+- Base discount: 12% off sum of individual tracks
+- Minimum album price: $7.99 USD
+- Maximum album price: $15.99 USD (standard releases)
+
+Extended Albums (16-25 tracks):
+- Base discount: 15% off sum of individual tracks
+- Minimum album price: $9.99 USD
+- Maximum album price: $18.99 USD
+
+Deluxe Editions (25+ tracks):
+- Base discount: 18% off sum of individual tracks
+- Minimum album price: $12.99 USD
+- Maximum album price: $24.99 USD
+
+Box Sets and Collections:
+- Discount: 20-30% off sum of individual tracks
+- Priced based on content volume
+- Often include exclusive bonus content
+- Range: $29.99 - $99.99 USD
+
+EP and Mini-Album Pricing:
+- 4-7 tracks: $3.99 - $5.99 USD
+- Discount: 10% off individual track sum
+- New release EPs may be priced at $5.99-$6.99
+
+Special Edition Pricing:
+
+Anniversary Editions:
+- 10th Anniversary: +$2.00 over standard album price
+- 25th Anniversary: +$3.00 over standard album price
+- 50th Anniversary: +$5.00 over standard album price
+- Include bonus content, liner notes, rare tracks
+
+Remastered Editions:
+- Standard remaster: +$1.00 over original album
+- Deluxe remaster: +$3.00 over original album
+- Super deluxe remaster: +$5.00 over original album
+
+Live Albums:
+- Standard live album: Same as studio album pricing
+- Multi-disc live recordings: $14.99 - $24.99
+- Official bootleg series: $9.99 - $12.99
+
+Soundtrack Pricing:
+- Single disc soundtracks: $9.99 - $12.99
+- Double disc soundtracks: $14.99 - $18.99
+- Complete score releases: $12.99 - $19.99
+
+================================================================================
+SECTION 4: AUDIO QUALITY PRICING
+================================================================================
+
+Format and Quality Tiers:
+
+Standard Quality (Included in base price):
+- MP3 256 kbps
+- File size: ~2MB per minute
+- Suitable for: Casual listening, mobile devices
+- No additional charge
+
+High Quality (Included in base price):
+- MP3 320 kbps
+- AAC 256 kbps
+- File size: ~2.5MB per minute
+- Suitable for: Most listening scenarios
+- No additional charge
+
+Lossless Quality (Premium):
+- FLAC 16-bit/44.1kHz (CD quality)
+- ALAC 16-bit/44.1kHz
+- File size: ~10MB per minute
+- Additional cost: +$0.50 per track
+- Additional cost: +$3.00 per album
+
+Hi-Res Audio (Premium):
+- FLAC 24-bit/96kHz
+- FLAC 24-bit/192kHz
+- File size: ~25MB per minute (96kHz), ~50MB (192kHz)
+- Additional cost: +$1.00 per track
+- Additional cost: +$6.00 per album
+- Availability: Limited to participating labels
+
+Masters Quality (Ultra-Premium):
+- Original master quality
+- MQA encoded files
+- Studio approval required
+- Additional cost: +$1.50 per track
+- Additional cost: +$10.00 per album
+- Availability: Select catalog only (~5%)
+
+Quality Upgrade Pricing:
+Customers who previously purchased lower quality can upgrade:
+- MP3 to Lossless: Pay difference ($0.50/track or $3.00/album)
+- MP3 to Hi-Res: Pay difference ($1.00/track or $6.00/album)
+- Lossless to Hi-Res: Pay difference ($0.50/track or $3.00/album)
+- No upgrade fee for purchases within 30 days
+
+================================================================================
+SECTION 5: CURRENCY AND INTERNATIONAL PRICING
+================================================================================
+
+Base Currency:
+All prices are set in United States Dollars (USD) and converted to local currencies for international customers.
+
+Supported Currencies:
+
+North American Currencies:
+- USD (US Dollar) - Base currency
+- CAD (Canadian Dollar)
+- MXN (Mexican Peso)
+
+European Currencies:
+- EUR (Euro)
+- GBP (British Pound Sterling)
+- CHF (Swiss Franc)
+- SEK (Swedish Krona)
+- NOK (Norwegian Krone)
+- DKK (Danish Krone)
+- PLN (Polish Zloty)
+
+Asia-Pacific Currencies:
+- JPY (Japanese Yen)
+- AUD (Australian Dollar)
+- NZD (New Zealand Dollar)
+- KRW (South Korean Won)
+- SGD (Singapore Dollar)
+- HKD (Hong Kong Dollar)
+- INR (Indian Rupee)
+
+Latin American Currencies:
+- BRL (Brazilian Real)
+- ARS (Argentine Peso)
+- CLP (Chilean Peso)
+- COP (Colombian Peso)
+- PEN (Peruvian Sol)
+
+Other Currencies:
+- ZAR (South African Rand)
+- AED (UAE Dirham)
+- ILS (Israeli Shekel)
+
+Current Exchange Rates (Reference - Updated January 2024):
+
+Currency    Rate vs USD    $0.99 Track    $9.99 Album
+USD         1.00           $0.99          $9.99
+EUR         0.92           €0.91          €9.19
+GBP         0.79           £0.78          £7.89
+CAD         1.35           C$1.34         C$13.49
+AUD         1.53           A$1.51         A$15.28
+JPY         148.00         ¥147           ¥1,479
+MXN         17.15          MX$16.98       MX$171.35
+BRL         4.92           R$4.87         R$49.15
+INR         83.12          ₹82.29         ₹830.78
+KRW         1,310          ₩1,297         ₩13,083
+CHF         0.86           CHF 0.85       CHF 8.59
+SEK         10.42          kr 10.32       kr 104.10
+SGD         1.34           S$1.33         S$13.39
+
+Note: Exchange rates are updated daily at 00:00 UTC and are approximate. 
+Actual rates applied at checkout may vary slightly.
+
+Regional Pricing Adjustments:
+
+Purchasing Power Parity (PPP) Adjustments:
+To ensure global accessibility, Chinook applies PPP adjustments to certain markets:
+
+Tier 1 Markets (Full Price):
+- United States, Canada, Western Europe, Australia, Japan
+- Standard USD equivalent pricing
+
+Tier 2 Markets (10% Discount):
+- Eastern Europe, South Korea, Singapore, Hong Kong
+- 10% reduction from USD equivalent
+
+Tier 3 Markets (20% Discount):
+- Mexico, Brazil, South Africa, Thailand, Malaysia
+- 20% reduction from USD equivalent
+
+Tier 4 Markets (30% Discount):
+- India, Indonesia, Philippines, Colombia, Peru
+- 30% reduction from USD equivalent
+
+Tier 5 Markets (40% Discount):
+- Select developing markets
+- 40% reduction from USD equivalent
+- Subject to content availability
+
+Local Pricing Examples:
+
+United States:
+- Standard track: $0.99 USD
+- Standard album: $9.99 USD
+
+United Kingdom:
+- Standard track: £0.79 GBP
+- Standard album: £7.99 GBP
+
+European Union (Euro):
+- Standard track: €0.99 EUR
+- Standard album: €9.99 EUR
+
+Japan:
+- Standard track: ¥150 JPY
+- Standard album: ¥1,500 JPY
+
+Australia:
+- Standard track: A$1.49 AUD
+- Standard album: A$14.99 AUD
+
+Mexico:
+- Standard track: MX$15.00 MXN
+- Standard album: MX$149.00 MXN
+
+Brazil:
+- Standard track: R$3.90 BRL
+- Standard album: R$39.90 BRL
+
+India:
+- Standard track: ₹59 INR
+- Standard album: ₹599 INR
+
+================================================================================
+SECTION 6: PAYMENT METHODS
+================================================================================
+
+Accepted Payment Methods:
+
+Credit and Debit Cards:
+- Visa (Credit, Debit, Prepaid)
+- Mastercard (Credit, Debit, Prepaid)
+- American Express
+- Discover
+- JCB (Japan, select international)
+- UnionPay (China, select international)
+- Diners Club
+- Maestro (Europe)
+
+Digital Wallets:
+- PayPal
+- Apple Pay
+- Google Pay
+- Samsung Pay
+- Amazon Pay
+
+Bank Transfers:
+- ACH (United States)
+- SEPA (European Union)
+- Faster Payments (United Kingdom)
+- BECS (Australia)
+- Interac (Canada)
+
+Alternative Payment Methods:
+- Chinook Gift Cards
+- Chinook Account Credit
+- Klarna (Pay Later - select markets)
+- Afterpay (Australia, US)
+- iDEAL (Netherlands)
+- Bancontact (Belgium)
+- Sofort (Germany, Austria)
+- Przelewy24 (Poland)
+- Boleto Bancário (Brazil)
+- OXXO (Mexico)
+
+Cryptocurrency (Beta):
+- Bitcoin (BTC)
+- Ethereum (ETH)
+- Litecoin (LTC)
+- Bitcoin Cash (BCH)
+- Processing fee: 1% additional
+- Converted to USD at time of purchase
+
+Payment Processing:
+
+Processing Partners:
+- Primary: Stripe
+- Secondary: PayPal
+- Regional: Adyen (Europe), Mercado Pago (Latin America)
+
+Processing Times:
+- Credit/Debit cards: Instant
+- Digital wallets: Instant
+- Bank transfers: 1-3 business days
+- Cryptocurrency: 10-60 minutes (varies by network)
+
+Security Measures:
+- PCI-DSS Level 1 compliant
+- 3D Secure authentication supported
+- Fraud detection and prevention
+- Encrypted transmission (TLS 1.3)
+- Tokenization of card data
+
+Failed Payment Handling:
+- Automatic retry: 1x after 24 hours
+- Customer notification: Immediate email
+- Order hold period: 72 hours
+- After 72 hours: Order cancelled, no charge
+
+================================================================================
+SECTION 7: DISCOUNTS AND PROMOTIONS
+================================================================================
+
+Standard Discount Programs:
+
+Album Discounts:
+- 8-15 tracks: 12% off individual track total
+- 16-25 tracks: 15% off individual track total
+- 25+ tracks: 18% off individual track total
+- Box sets: 20-30% off
+
+Volume Discounts:
+- 10-24 tracks in single order: 5% off
+- 25-49 tracks in single order: 10% off
+- 50-99 tracks in single order: 15% off
+- 100+ tracks in single order: 20% off
+
+Loyalty Program (Chinook Rewards):
+
+Bronze Level (0-99 purchases lifetime):
+- Standard pricing
+- Email newsletter with exclusive offers
+- Birthday discount: 10% off single purchase
+
+Silver Level (100-499 purchases lifetime):
+- 3% discount on all purchases
+- Early access to sales (12 hours)
+- Birthday discount: 15% off single purchase
+- Quarterly bonus credits ($2)
+
+Gold Level (500-999 purchases lifetime):
+- 5% discount on all purchases
+- Early access to sales (24 hours)
+- Birthday discount: 20% off single purchase
+- Monthly bonus credits ($3)
+- Priority customer support
+
+Platinum Level (1000+ purchases lifetime):
+- 7% discount on all purchases
+- Early access to sales (48 hours)
+- Birthday discount: 25% off single purchase
+- Monthly bonus credits ($5)
+- Dedicated account manager
+- Exclusive content access
+
+Promotional Campaigns:
+
+Seasonal Sales:
+- New Year Sale (January 1-7): Up to 30% off
+- Valentine's Day (February 14): Love songs collection 25% off
+- Spring Sale (March): 20% off select genres
+- Summer Kickoff (June): Dance/Party music 25% off
+- Back to School (August): 20% off classical/study music
+- Halloween (October 31): Horror soundtracks 30% off
+- Black Friday (November): Up to 50% off site-wide
+- Cyber Monday (November): Flash sales hourly
+- Holiday Season (December): Gift-focused promotions
+
+Genre-Specific Promotions:
+- Jazz Appreciation Month (April): 25% off jazz catalog
+- Latin Music Month (October): 25% off Latin catalog
+- Classical Music Month (September): 25% off classical
+- Blues Month (May): 25% off blues catalog
+
+Artist Spotlight Sales:
+- Weekly featured artist: 30% off complete catalog
+- New release support: First week bundles
+- Anniversary celebrations: Catalog-wide discounts
+
+First-Time Customer Offers:
+- Welcome discount: 20% off first purchase
+- Free track: Select from curated list
+- Email signup: Additional 10% off first purchase
+
+Promo Code Rules:
+- Maximum one promo code per order
+- Cannot be combined with other offers (except loyalty discount)
+- Minimum purchase may apply
+- Expiration dates strictly enforced
+- Non-transferable
+- No cash value
+
+================================================================================
+SECTION 8: REFUND AND RETURN POLICY
+================================================================================
+
+General Policy:
+Digital music downloads are generally non-refundable once delivered, as the product cannot be "returned" in the traditional sense. However, Chinook provides refunds in the following circumstances:
+
+Eligible Refund Situations:
+
+Technical Issues:
+- Download failure (file corruption)
+- Playback issues (defective file)
+- Wrong file delivered
+- Missing tracks in album purchase
+Resolution: Full refund or replacement file
+
+Duplicate Purchases:
+- Accidental double-purchase of same track/album
+- Previous purchase within 30 days
+Resolution: Full refund of duplicate purchase
+
+Billing Errors:
+- Charged incorrect amount
+- Unauthorized charges
+- Currency conversion errors
+Resolution: Refund of overcharge or full refund
+
+Quality Issues:
+- Audio quality significantly below advertised
+- Incomplete or cut-off recordings
+- Mislabeled content (wrong song/artist)
+Resolution: Full refund or replacement
+
+Pre-Order Cancellations:
+- Cancellation before release date
+- Release date delayed by more than 30 days
+Resolution: Full refund
+
+Non-Refundable Situations:
+- Change of mind after download
+- Dislike of music after purchase
+- Device compatibility issues (if format was clearly stated)
+- Downloaded and listened to complete album/track
+- Purchase made more than 90 days ago
+
+Refund Process:
+
+Requesting a Refund:
+1. Log into your Chinook account
+2. Go to Purchase History
+3. Select the item for refund
+4. Click "Request Refund"
+5. Select reason from dropdown
+6. Provide additional details if needed
+7. Submit request
+
+Processing Times:
+- Review: 1-2 business days
+- Decision notification: Email within 3 business days
+- Refund processing: 5-7 business days after approval
+- Credit card refunds: 3-5 additional business days to appear
+
+Refund Methods:
+- Original payment method (preferred)
+- Chinook account credit (immediate)
+- PayPal refund (if originally paid via PayPal)
+
+Refund Limits:
+- Maximum refunds per customer per year: 10
+- Excessive refund requests may result in account review
+- Suspicious refund patterns may result in account suspension
+
+================================================================================
+SECTION 9: SUBSCRIPTION PRICING
+================================================================================
+
+Chinook Premium Subscription:
+
+Monthly Plan:
+- Price: $9.99 USD/month
+- Billing: Monthly on signup date
+- Cancellation: Anytime, access until end of billing period
+
+Annual Plan:
+- Price: $99.99 USD/year (save $19.89 vs monthly)
+- Billing: Annually on signup date
+- Cancellation: Prorated refund for unused months (first 30 days only)
+
+Student Plan:
+- Price: $4.99 USD/month
+- Requirements: Valid .edu email or student verification
+- Verification: Annual re-verification required
+- Features: Same as monthly plan
+
+Family Plan:
+- Price: $14.99 USD/month
+- Members: Up to 6 family members
+- Requirements: Same household address
+- Features: Individual profiles, shared family library
+
+Premium Features:
+- Early access to new releases (24-48 hours)
+- Exclusive tracks and remixes
+- High-quality streaming previews (320kbps)
+- Ad-free experience on web and apps
+- Priority customer support
+- Monthly credit: 2 free tracks ($1.98 value)
+- Birthday bonus: 5 free tracks
+
+Chinook for Business Pricing:
+
+Small Business (1-3 locations):
+- Base price: $49.99/month per location
+- Catalog access: Full (with public performance license)
+- Concurrent streams: Up to 3 per location
+- Annual discount: 15% ($509.89/year per location)
+
+Medium Business (4-10 locations):
+- Base price: $39.99/month per location
+- Catalog access: Full
+- Concurrent streams: Up to 5 per location
+- Annual discount: 20% ($383.90/year per location)
+
+Enterprise (11+ locations):
+- Price: Custom quote
+- Volume discounts available
+- Dedicated account manager
+- Custom playlist curation
+- Integration support
+
+================================================================================
+SECTION 10: TAX AND FEES
+================================================================================
+
+Sales Tax:
+Chinook collects and remits sales tax where required by law. Tax rates vary by jurisdiction and are calculated at checkout.
+
+United States:
+- Tax calculated based on customer billing address
+- Rates vary by state, county, and city
+- Tax-exempt purchases: Provide valid exemption certificate
+
+European Union:
+- VAT included in displayed prices for EU customers
+- Standard VAT rates apply by country
+- VAT rate range: 17% (Luxembourg) to 27% (Hungary)
+- B2B: VAT reverse charge available with valid VAT ID
+
+United Kingdom:
+- VAT (20%) included in displayed prices
+- Digital services VAT applies
+
+Canada:
+- GST/HST calculated based on province
+- Rates: 5% (Alberta) to 15% (Nova Scotia, etc.)
+
+Australia:
+- GST (10%) included in displayed prices
+
+Japan:
+- Consumption Tax (10%) included in displayed prices
+
+Other Jurisdictions:
+- Local taxes calculated where applicable
+- Tax displayed at checkout before payment
+
+Additional Fees:
+
+Currency Conversion Fee:
+- No Chinook fee for currency conversion
+- Your bank may charge conversion fees
+
+Payment Processing Fees:
+- Absorbed by Chinook for standard payments
+- Cryptocurrency: 1% processing fee applies
+- Wire transfers: $15 fee may apply
+
+Download Fees:
+- No additional download fees
+- Unlimited re-downloads of purchased content
+
+================================================================================
+SECTION 11: PRICE MATCHING AND GUARANTEES
+================================================================================
+
+Price Match Policy:
+Chinook offers price matching under the following conditions:
+
+Eligible Competitors:
+- Apple Music/iTunes Store
+- Amazon Music
+- Google Play Music
+- Spotify (for purchase options)
+- Beatport (electronic music)
+- Qobuz
+- HDtracks
+
+Price Match Requirements:
+- Same track/album (identical recording)
+- Same audio quality tier
+- Competitor price publicly visible
+- Price match request within 7 days of purchase
+- Limit: 5 price matches per customer per month
+
+How to Request:
+1. Contact customer support
+2. Provide competitor URL
+3. Provide your Chinook order number
+4. Refund of difference issued within 5 business days
+
+Low Price Guarantee:
+If Chinook reduces the price of an item within 14 days of your purchase, you may request a refund of the difference.
+
+Requirements:
+- Same item (track/album)
+- Same audio quality
+- Request within 14 days of original purchase
+- Excludes limited-time flash sales (under 24 hours)
+
+================================================================================
+SECTION 12: SPECIAL PRICING PROGRAMS
+================================================================================
+
+Educational Pricing:
+
+Individual Student:
+- Verification required (SheerID)
+- 25% off all track/album purchases
+- Premium subscription: $4.99/month
+
+Educational Institutions:
+- Volume licensing available
+- Custom pricing based on student count
+- Site licenses for music labs
+- Contact: education@chinookmusic.com
+
+Non-Profit Pricing:
+- Verified 501(c)(3) organizations
+- 20% discount on all purchases
+- Contact: nonprofit@chinookmusic.com
+
+Military/Veteran Pricing:
+- Active duty and veterans
+- Verification via ID.me
+- 15% discount on all purchases
+- Premium subscription: $7.99/month
+
+Senior Discount:
+- Age 65+
+- 10% discount on all purchases
+- Available upon request via customer support
+
+Accessibility Program:
+- Customers with documented disabilities
+- 20% discount on all purchases
+- Contact: accessibility@chinookmusic.com
+
+================================================================================
+
+Document Version: 4.3
+Last Updated: January 2024
+Next Review: April 2024
+Document Owner: Finance Department
+Contact: pricing@chinookmusic.com
+Classification: Public
+

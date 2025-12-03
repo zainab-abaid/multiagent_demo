@@ -1,0 +1,1071 @@
+Chinook Music Store - Technical Platform and API Documentation
+
+================================================================================
+SECTION 1: PLATFORM ARCHITECTURE OVERVIEW
+================================================================================
+
+System Architecture:
+
+Chinook Music Store runs on a modern, cloud-native architecture designed for scalability, reliability, and performance. The platform handles millions of transactions annually and serves customers in over 75 countries.
+
+High-Level Components:
+
+1. Web Application Layer
+- Frontend: React.js single-page application
+- Backend: Node.js with Express framework
+- Server-side rendering for SEO optimization
+- Progressive Web App (PWA) capabilities
+
+2. Mobile Applications
+- iOS: Native Swift application
+- Android: Native Kotlin application
+- React Native shared components for some features
+- Offline capability for downloaded content
+
+3. API Gateway
+- Kong API Gateway for routing and rate limiting
+- OAuth 2.0 authentication
+- API versioning support
+- Request/response transformation
+
+4. Microservices Layer
+- User Service: Authentication, profiles, preferences
+- Catalog Service: Music catalog, metadata, search
+- Order Service: Cart, checkout, order management
+- Payment Service: Payment processing, subscriptions
+- Download Service: File delivery, DRM, CDN integration
+- Analytics Service: Event tracking, reporting
+- Notification Service: Email, push, in-app messages
+- Recommendation Service: ML-powered recommendations
+
+5. Data Layer
+- Primary Database: PostgreSQL (RDS)
+- Cache: Redis cluster
+- Search: Elasticsearch
+- Analytics: ClickHouse
+- Data Warehouse: Snowflake
+
+6. Infrastructure
+- Cloud Provider: Amazon Web Services (AWS)
+- Containerization: Docker + Kubernetes (EKS)
+- CI/CD: GitHub Actions + ArgoCD
+- Monitoring: Datadog, PagerDuty
+- CDN: CloudFront + S3
+
+Technology Stack:
+
+Frontend:
+- React 18.x
+- TypeScript
+- Redux Toolkit (state management)
+- React Query (data fetching)
+- Styled Components (styling)
+- Webpack 5 (bundling)
+
+Backend:
+- Node.js 20.x LTS
+- Express 4.x
+- TypeScript
+- Prisma (ORM)
+- Jest (testing)
+
+Databases:
+- PostgreSQL 15.x (primary data)
+- Redis 7.x (caching, sessions)
+- Elasticsearch 8.x (search)
+- MongoDB 6.x (analytics events)
+
+Infrastructure:
+- Kubernetes 1.28
+- Docker
+- Terraform (IaC)
+- AWS Services (EKS, RDS, S3, CloudFront, SQS, SNS)
+
+Scalability Characteristics:
+
+- Horizontal scaling for all services
+- Auto-scaling based on CPU/memory/request metrics
+- Multi-region deployment (US-West, EU-West, AP-Northeast)
+- Database read replicas for read-heavy operations
+- CDN edge caching for static assets and audio files
+
+Performance Targets:
+- API response time: <100ms (p95)
+- Page load time: <2s (first contentful paint)
+- Availability: 99.95% uptime
+- Audio download start: <500ms
+
+================================================================================
+SECTION 2: DATABASE SCHEMA
+================================================================================
+
+Core Entities:
+
+The Chinook database is built on a relational model optimized for music catalog management, customer transactions, and analytics.
+
+Entity Relationship Overview:
+
+```
+Artists ─┬─< Albums ─┬─< Tracks >─┬─ Genres
+         │          │            │
+         │          │            └─ MediaTypes
+         │          │
+         │          └─< AlbumArtwork
+         │
+         └─< ArtistImages
+
+Customers ─┬─< Orders ─< OrderItems >─ Tracks
+           │
+           ├─< CustomerPaymentMethods
+           │
+           ├─< CustomerPreferences
+           │
+           └─< Playlists ─< PlaylistTracks >─ Tracks
+
+Employees ─< Employees (self-referencing for manager)
+```
+
+Table Definitions:
+
+Artists Table:
+```sql
+CREATE TABLE artists (
+    artist_id SERIAL PRIMARY KEY,
+    name VARCHAR(200) NOT NULL,
+    sort_name VARCHAR(200),
+    bio TEXT,
+    country VARCHAR(100),
+    formed_year INTEGER,
+    website VARCHAR(500),
+    spotify_id VARCHAR(50),
+    apple_music_id VARCHAR(50),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Albums Table:
+```sql
+CREATE TABLE albums (
+    album_id SERIAL PRIMARY KEY,
+    artist_id INTEGER REFERENCES artists(artist_id),
+    title VARCHAR(300) NOT NULL,
+    release_date DATE,
+    record_label VARCHAR(200),
+    catalog_number VARCHAR(100),
+    upc VARCHAR(20),
+    album_type VARCHAR(50), -- 'album', 'ep', 'single', 'compilation'
+    total_tracks INTEGER,
+    total_duration_ms INTEGER,
+    is_explicit BOOLEAN DEFAULT false,
+    is_available BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Tracks Table:
+```sql
+CREATE TABLE tracks (
+    track_id SERIAL PRIMARY KEY,
+    album_id INTEGER REFERENCES albums(album_id),
+    name VARCHAR(300) NOT NULL,
+    track_number INTEGER,
+    disc_number INTEGER DEFAULT 1,
+    duration_ms INTEGER NOT NULL,
+    isrc VARCHAR(20),
+    genre_id INTEGER REFERENCES genres(genre_id),
+    media_type_id INTEGER REFERENCES media_types(media_type_id),
+    composer VARCHAR(300),
+    unit_price DECIMAL(10,2) NOT NULL,
+    is_explicit BOOLEAN DEFAULT false,
+    preview_url VARCHAR(500),
+    is_available BOOLEAN DEFAULT true,
+    popularity_score INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Genres Table:
+```sql
+CREATE TABLE genres (
+    genre_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    parent_genre_id INTEGER REFERENCES genres(genre_id),
+    description TEXT,
+    display_order INTEGER
+);
+```
+
+MediaTypes Table:
+```sql
+CREATE TABLE media_types (
+    media_type_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL, -- 'MP3', 'AAC', 'FLAC', 'ALAC'
+    file_extension VARCHAR(10),
+    bitrate INTEGER,
+    is_lossless BOOLEAN DEFAULT false,
+    price_modifier DECIMAL(3,2) DEFAULT 1.00
+);
+```
+
+Customers Table:
+```sql
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    phone VARCHAR(50),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    postal_code VARCHAR(20),
+    country VARCHAR(100),
+    loyalty_tier VARCHAR(20) DEFAULT 'bronze',
+    lifetime_purchases INTEGER DEFAULT 0,
+    email_verified BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Orders Table:
+```sql
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customers(customer_id),
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'pending',
+    subtotal DECIMAL(12,2),
+    discount_amount DECIMAL(12,2) DEFAULT 0,
+    tax_amount DECIMAL(12,2) DEFAULT 0,
+    total DECIMAL(12,2),
+    currency VARCHAR(3) DEFAULT 'USD',
+    payment_method_id INTEGER,
+    billing_address_id INTEGER,
+    promo_code VARCHAR(50),
+    ip_address VARCHAR(50),
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+OrderItems Table:
+```sql
+CREATE TABLE order_items (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INTEGER REFERENCES orders(order_id),
+    track_id INTEGER REFERENCES tracks(track_id),
+    album_id INTEGER REFERENCES albums(album_id), -- if full album purchase
+    media_type_id INTEGER REFERENCES media_types(media_type_id),
+    unit_price DECIMAL(10,2) NOT NULL,
+    quantity INTEGER DEFAULT 1,
+    discount_percent DECIMAL(5,2) DEFAULT 0,
+    download_count INTEGER DEFAULT 0,
+    max_downloads INTEGER DEFAULT 5,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Invoices Table (Legacy Support):
+```sql
+CREATE TABLE invoices (
+    invoice_id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customers(customer_id),
+    invoice_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    billing_address VARCHAR(200),
+    billing_city VARCHAR(100),
+    billing_state VARCHAR(100),
+    billing_country VARCHAR(100),
+    billing_postal_code VARCHAR(20),
+    total DECIMAL(12,2) NOT NULL
+);
+```
+
+InvoiceItems Table (Legacy Support):
+```sql
+CREATE TABLE invoice_items (
+    invoice_item_id SERIAL PRIMARY KEY,
+    invoice_id INTEGER REFERENCES invoices(invoice_id),
+    track_id INTEGER REFERENCES tracks(track_id),
+    unit_price DECIMAL(10,2) NOT NULL,
+    quantity INTEGER DEFAULT 1
+);
+```
+
+Employees Table:
+```sql
+CREATE TABLE employees (
+    employee_id SERIAL PRIMARY KEY,
+    manager_id INTEGER REFERENCES employees(employee_id),
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(50),
+    hire_date DATE,
+    job_title VARCHAR(100),
+    department VARCHAR(100),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    postal_code VARCHAR(20),
+    country VARCHAR(100),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Playlists Table:
+```sql
+CREATE TABLE playlists (
+    playlist_id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customers(customer_id),
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    is_public BOOLEAN DEFAULT false,
+    is_collaborative BOOLEAN DEFAULT false,
+    image_url VARCHAR(500),
+    track_count INTEGER DEFAULT 0,
+    total_duration_ms INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+PlaylistTracks Table:
+```sql
+CREATE TABLE playlist_tracks (
+    playlist_track_id SERIAL PRIMARY KEY,
+    playlist_id INTEGER REFERENCES playlists(playlist_id),
+    track_id INTEGER REFERENCES tracks(track_id),
+    position INTEGER NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    added_by_customer_id INTEGER REFERENCES customers(customer_id),
+    UNIQUE(playlist_id, track_id)
+);
+```
+
+================================================================================
+SECTION 3: API REFERENCE
+================================================================================
+
+API Overview:
+
+The Chinook API is a RESTful API that enables developers to integrate with the Chinook Music Store platform. The API supports reading catalog data, managing customer accounts, processing purchases, and accessing analytics.
+
+Base URLs:
+- Production: https://api.chinookmusic.com/v1
+- Sandbox: https://api-sandbox.chinookmusic.com/v1
+
+Authentication:
+
+All API requests require authentication using OAuth 2.0 Bearer tokens.
+
+Obtaining Access Token:
+```http
+POST /oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET
+```
+
+Response:
+```json
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "catalog:read orders:read orders:write"
+}
+```
+
+Using Access Token:
+```http
+GET /v1/tracks/123
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+Rate Limiting:
+
+Default Limits:
+- Free tier: 100 requests/hour
+- Standard tier: 1,000 requests/hour
+- Premium tier: 10,000 requests/hour
+- Enterprise: Custom limits
+
+Rate Limit Headers:
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 998
+X-RateLimit-Reset: 1640000000
+```
+
+API Endpoints:
+
+CATALOG ENDPOINTS:
+
+List Artists:
+```http
+GET /v1/artists
+```
+
+Query Parameters:
+- page (integer): Page number (default: 1)
+- per_page (integer): Results per page (default: 20, max: 100)
+- sort (string): Sort field (name, popularity)
+- order (string): Sort order (asc, desc)
+- genre (string): Filter by genre
+- country (string): Filter by country
+
+Response:
+```json
+{
+  "data": [
+    {
+      "artist_id": 1,
+      "name": "AC/DC",
+      "sort_name": "AC/DC",
+      "country": "Australia",
+      "formed_year": 1973,
+      "genre": "Rock",
+      "album_count": 18,
+      "track_count": 200,
+      "popularity_score": 95
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 20,
+    "total": 275,
+    "total_pages": 14
+  }
+}
+```
+
+Get Artist:
+```http
+GET /v1/artists/{artist_id}
+```
+
+Response:
+```json
+{
+  "artist_id": 1,
+  "name": "AC/DC",
+  "sort_name": "AC/DC",
+  "bio": "AC/DC are an Australian rock band...",
+  "country": "Australia",
+  "formed_year": 1973,
+  "website": "https://www.acdc.com",
+  "images": {
+    "thumbnail": "https://cdn.chinookmusic.com/artists/1/thumb.jpg",
+    "medium": "https://cdn.chinookmusic.com/artists/1/medium.jpg",
+    "large": "https://cdn.chinookmusic.com/artists/1/large.jpg"
+  },
+  "albums": [...],
+  "top_tracks": [...],
+  "similar_artists": [...]
+}
+```
+
+Get Artist Albums:
+```http
+GET /v1/artists/{artist_id}/albums
+```
+
+List Albums:
+```http
+GET /v1/albums
+```
+
+Query Parameters:
+- page, per_page, sort, order (as above)
+- artist_id (integer): Filter by artist
+- genre (string): Filter by genre
+- release_year (integer): Filter by release year
+- album_type (string): Filter by type (album, ep, single, compilation)
+
+Get Album:
+```http
+GET /v1/albums/{album_id}
+```
+
+Response:
+```json
+{
+  "album_id": 1,
+  "title": "For Those About To Rock We Salute You",
+  "artist": {
+    "artist_id": 1,
+    "name": "AC/DC"
+  },
+  "release_date": "1981-11-23",
+  "record_label": "Atlantic Records",
+  "album_type": "album",
+  "total_tracks": 10,
+  "total_duration_ms": 2453000,
+  "artwork": {
+    "thumbnail": "https://cdn.chinookmusic.com/albums/1/thumb.jpg",
+    "medium": "https://cdn.chinookmusic.com/albums/1/medium.jpg",
+    "large": "https://cdn.chinookmusic.com/albums/1/large.jpg"
+  },
+  "tracks": [...],
+  "price": {
+    "USD": 9.99,
+    "EUR": 8.99,
+    "GBP": 7.99
+  }
+}
+```
+
+List Tracks:
+```http
+GET /v1/tracks
+```
+
+Query Parameters:
+- page, per_page, sort, order (as above)
+- album_id (integer): Filter by album
+- artist_id (integer): Filter by artist
+- genre_id (integer): Filter by genre
+- min_price (decimal): Minimum price
+- max_price (decimal): Maximum price
+- is_explicit (boolean): Filter explicit content
+
+Get Track:
+```http
+GET /v1/tracks/{track_id}
+```
+
+Response:
+```json
+{
+  "track_id": 1,
+  "name": "For Those About To Rock (We Salute You)",
+  "artist": {
+    "artist_id": 1,
+    "name": "AC/DC"
+  },
+  "album": {
+    "album_id": 1,
+    "title": "For Those About To Rock We Salute You"
+  },
+  "track_number": 1,
+  "disc_number": 1,
+  "duration_ms": 343719,
+  "duration_formatted": "5:43",
+  "genre": {
+    "genre_id": 1,
+    "name": "Rock"
+  },
+  "isrc": "AUAP09100000",
+  "is_explicit": false,
+  "preview_url": "https://cdn.chinookmusic.com/previews/1.mp3",
+  "price": {
+    "USD": 0.99,
+    "EUR": 0.89,
+    "GBP": 0.79
+  },
+  "available_formats": [
+    {"media_type_id": 1, "name": "MP3 256kbps", "price_modifier": 1.0},
+    {"media_type_id": 2, "name": "MP3 320kbps", "price_modifier": 1.0},
+    {"media_type_id": 3, "name": "FLAC", "price_modifier": 1.5}
+  ]
+}
+```
+
+Search:
+```http
+GET /v1/search
+```
+
+Query Parameters:
+- q (string, required): Search query
+- type (string): Comma-separated types (artist, album, track, playlist)
+- limit (integer): Results per type (default: 10, max: 50)
+
+Response:
+```json
+{
+  "query": "for those about to rock",
+  "artists": [...],
+  "albums": [...],
+  "tracks": [...],
+  "playlists": [...]
+}
+```
+
+List Genres:
+```http
+GET /v1/genres
+```
+
+CUSTOMER ENDPOINTS:
+
+Get Current Customer:
+```http
+GET /v1/me
+```
+
+Update Customer Profile:
+```http
+PATCH /v1/me
+```
+
+Get Customer Orders:
+```http
+GET /v1/me/orders
+```
+
+Get Customer Library:
+```http
+GET /v1/me/library
+```
+
+ORDER ENDPOINTS:
+
+Create Order:
+```http
+POST /v1/orders
+Content-Type: application/json
+
+{
+  "items": [
+    {"track_id": 1, "media_type_id": 1},
+    {"track_id": 2, "media_type_id": 1}
+  ],
+  "promo_code": "SAVE10",
+  "payment_method_id": 123
+}
+```
+
+Get Order:
+```http
+GET /v1/orders/{order_id}
+```
+
+Get Download Link:
+```http
+GET /v1/orders/{order_id}/items/{order_item_id}/download
+```
+
+Response:
+```json
+{
+  "download_url": "https://cdn.chinookmusic.com/download/...",
+  "expires_at": "2024-01-15T12:00:00Z",
+  "file_size_bytes": 8547632,
+  "file_name": "for_those_about_to_rock.mp3"
+}
+```
+
+PLAYLIST ENDPOINTS:
+
+List Customer Playlists:
+```http
+GET /v1/me/playlists
+```
+
+Create Playlist:
+```http
+POST /v1/me/playlists
+Content-Type: application/json
+
+{
+  "name": "My Favorites",
+  "description": "My favorite tracks",
+  "is_public": false
+}
+```
+
+Add Tracks to Playlist:
+```http
+POST /v1/me/playlists/{playlist_id}/tracks
+Content-Type: application/json
+
+{
+  "track_ids": [1, 2, 3, 4, 5]
+}
+```
+
+================================================================================
+SECTION 4: WEBHOOKS
+================================================================================
+
+Webhook Overview:
+
+Webhooks allow your application to receive real-time notifications when events occur in Chinook. Instead of polling the API, webhooks push data to your server when something happens.
+
+Available Events:
+
+Order Events:
+- order.created: New order placed
+- order.completed: Order successfully processed
+- order.failed: Order processing failed
+- order.refunded: Order refunded
+
+Customer Events:
+- customer.created: New customer registration
+- customer.updated: Customer profile updated
+- customer.subscription.created: New subscription
+- customer.subscription.cancelled: Subscription cancelled
+
+Catalog Events:
+- album.released: New album available
+- track.released: New track available
+- artist.updated: Artist information updated
+
+Webhook Configuration:
+
+Register Webhook:
+```http
+POST /v1/webhooks
+Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+{
+  "url": "https://your-server.com/webhooks/chinook",
+  "events": ["order.created", "order.completed"],
+  "secret": "your_webhook_secret"
+}
+```
+
+Webhook Payload Format:
+```json
+{
+  "id": "evt_1234567890",
+  "type": "order.completed",
+  "created_at": "2024-01-15T12:00:00Z",
+  "data": {
+    "order_id": 12345,
+    "customer_id": 6789,
+    "total": 9.99,
+    "currency": "USD",
+    "items": [...]
+  }
+}
+```
+
+Webhook Security:
+
+All webhook payloads are signed using HMAC-SHA256. Verify the signature before processing:
+
+Signature Header:
+```
+X-Chinook-Signature: sha256=abc123...
+```
+
+Verification (Node.js example):
+```javascript
+const crypto = require('crypto');
+
+function verifyWebhook(payload, signature, secret) {
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex');
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  );
+}
+```
+
+================================================================================
+SECTION 5: SDKS AND LIBRARIES
+================================================================================
+
+Official SDKs:
+
+JavaScript/Node.js:
+```bash
+npm install @chinook/sdk
+```
+
+```javascript
+const Chinook = require('@chinook/sdk');
+
+const client = new Chinook({
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET'
+});
+
+// Search for tracks
+const results = await client.search('for those about to rock');
+
+// Get artist details
+const artist = await client.artists.get(1);
+
+// Create order
+const order = await client.orders.create({
+  items: [{ trackId: 1, mediaTypeId: 1 }]
+});
+```
+
+Python:
+```bash
+pip install chinook-sdk
+```
+
+```python
+from chinook import ChinookClient
+
+client = ChinookClient(
+    client_id='YOUR_CLIENT_ID',
+    client_secret='YOUR_CLIENT_SECRET'
+)
+
+# Search for tracks
+results = client.search('for those about to rock')
+
+# Get artist details
+artist = client.artists.get(1)
+
+# Create order
+order = client.orders.create(
+    items=[{'track_id': 1, 'media_type_id': 1}]
+)
+```
+
+Ruby:
+```bash
+gem install chinook-sdk
+```
+
+```ruby
+require 'chinook'
+
+client = Chinook::Client.new(
+  client_id: 'YOUR_CLIENT_ID',
+  client_secret: 'YOUR_CLIENT_SECRET'
+)
+
+# Search for tracks
+results = client.search('for those about to rock')
+
+# Get artist details
+artist = client.artists.get(1)
+```
+
+PHP:
+```bash
+composer require chinook/sdk
+```
+
+```php
+<?php
+use Chinook\Client;
+
+$client = new Client([
+    'client_id' => 'YOUR_CLIENT_ID',
+    'client_secret' => 'YOUR_CLIENT_SECRET'
+]);
+
+// Search for tracks
+$results = $client->search('for those about to rock');
+
+// Get artist details
+$artist = $client->artists->get(1);
+```
+
+================================================================================
+SECTION 6: ERROR HANDLING
+================================================================================
+
+Error Response Format:
+
+All API errors return a consistent JSON format:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "The request was invalid",
+    "details": [
+      {
+        "field": "email",
+        "message": "Invalid email format"
+      }
+    ],
+    "request_id": "req_abc123"
+  }
+}
+```
+
+HTTP Status Codes:
+
+- 200 OK: Successful request
+- 201 Created: Resource created
+- 204 No Content: Successful with no response body
+- 400 Bad Request: Invalid request (validation error)
+- 401 Unauthorized: Missing or invalid authentication
+- 403 Forbidden: Insufficient permissions
+- 404 Not Found: Resource not found
+- 409 Conflict: Resource already exists
+- 422 Unprocessable Entity: Request valid but cannot process
+- 429 Too Many Requests: Rate limit exceeded
+- 500 Internal Server Error: Server error
+- 503 Service Unavailable: Temporary outage
+
+Common Error Codes:
+
+- INVALID_REQUEST: Malformed request body
+- VALIDATION_ERROR: Field validation failed
+- AUTHENTICATION_REQUIRED: No auth token provided
+- INVALID_TOKEN: Token expired or invalid
+- INSUFFICIENT_SCOPE: Token lacks required scope
+- RESOURCE_NOT_FOUND: Requested resource doesn't exist
+- DUPLICATE_RESOURCE: Resource already exists
+- RATE_LIMIT_EXCEEDED: Too many requests
+- PAYMENT_FAILED: Payment processing failed
+- INTERNAL_ERROR: Unexpected server error
+
+================================================================================
+SECTION 7: SANDBOX ENVIRONMENT
+================================================================================
+
+Sandbox Overview:
+
+The sandbox environment allows developers to test their integrations without affecting real data or processing real payments.
+
+Sandbox Base URL:
+https://api-sandbox.chinookmusic.com/v1
+
+Sandbox Credentials:
+- Register at developers.chinookmusic.com
+- Create sandbox application
+- Receive sandbox client ID and secret
+
+Test Data:
+
+Sandbox includes sample data for testing:
+- 10,000 test tracks
+- 500 test artists
+- 1,000 test albums
+- Test customer accounts
+
+Test Payment Cards:
+- Success: 4242 4242 4242 4242
+- Decline: 4000 0000 0000 0002
+- Insufficient funds: 4000 0000 0000 9995
+- Use any future expiry date and any 3-digit CVC
+
+Sandbox Limitations:
+- No real payments processed
+- No real downloads
+- Data reset weekly
+- Rate limits lower than production
+- Some features may be limited
+
+================================================================================
+SECTION 8: BEST PRACTICES
+================================================================================
+
+API Best Practices:
+
+1. Pagination:
+Always handle pagination for list endpoints:
+```javascript
+async function getAllArtists() {
+  let allArtists = [];
+  let page = 1;
+  let hasMore = true;
+  
+  while (hasMore) {
+    const response = await client.artists.list({ page, per_page: 100 });
+    allArtists = allArtists.concat(response.data);
+    hasMore = page < response.pagination.total_pages;
+    page++;
+  }
+  
+  return allArtists;
+}
+```
+
+2. Error Handling:
+Implement robust error handling:
+```javascript
+try {
+  const order = await client.orders.create(orderData);
+} catch (error) {
+  if (error.code === 'PAYMENT_FAILED') {
+    // Handle payment failure
+  } else if (error.code === 'RATE_LIMIT_EXCEEDED') {
+    // Wait and retry
+  } else {
+    // Log and handle other errors
+  }
+}
+```
+
+3. Caching:
+Cache catalog data to reduce API calls:
+- Cache genres (changes rarely)
+- Cache popular artists and albums (TTL: 1 hour)
+- Don't cache customer-specific data
+
+4. Idempotency:
+Use idempotency keys for order creation:
+```http
+POST /v1/orders
+Idempotency-Key: user_123_order_456
+```
+
+5. Webhook Reliability:
+- Respond to webhooks quickly (< 5 seconds)
+- Return 200 status to acknowledge receipt
+- Process webhook data asynchronously
+- Handle duplicate deliveries gracefully
+
+================================================================================
+SECTION 9: SUPPORT AND RESOURCES
+================================================================================
+
+Developer Resources:
+
+Developer Portal: developers.chinookmusic.com
+- API documentation
+- SDK downloads
+- Code samples
+- Changelog
+
+API Status: status.chinookmusic.com
+- Real-time status
+- Incident history
+- Scheduled maintenance
+
+Community:
+- Developer Forum: community.chinookmusic.com/developers
+- Stack Overflow: Tag with [chinook-api]
+- GitHub: github.com/chinook-music
+
+Support Contacts:
+
+Technical Support:
+- Email: api-support@chinookmusic.com
+- Response time: 24-48 hours
+
+Enterprise Support:
+- Email: enterprise@chinookmusic.com
+- Dedicated support engineer
+- Priority response
+
+Office Hours:
+- Weekly developer office hours (Thursdays 2pm PST)
+- Register at developers.chinookmusic.com/events
+
+================================================================================
+
+Document Version: 3.5
+Last Updated: January 2024
+API Version: v1.8.0
+Document Owner: Engineering Department
+Classification: Public
+

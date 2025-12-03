@@ -8,35 +8,7 @@ from agent.tracing import traced_llm_call, create_trace_event
 from agent.llm_utils import init_llm
 
 
-async def planner_node(state: AgentState) -> AgentState:
-    """
-    Planner node: creates a structured plan from the user query.
-    
-    Two modes:
-    1. Initial planning: Creates the first plan.
-    2. Replanning: Analyzes previous execution, adds correction steps if needed.
-    """
-    # Check if we are replanning (plan already exists)
-    is_replanning = state.get("plan") is not None and "steps" in state.get("plan", {})
-    
-    # Build memory view for context
-    memory_view = build_memory_view(state)
-    
-    # Initialize LLM
-    import os
-    config = state.get("config", {})
-    model_name = config.get("planner_model") or os.getenv("PLANNER_MODEL") or config.get("model_name", "gpt-4o-mini")
-    llm, actual_model_name = init_llm(model_name)
-    
-    if is_replanning:
-        return await _replan(state, llm, memory_view, actual_model_name)
-    else:
-        return await _initial_plan(state, llm, memory_view, actual_model_name)
-
-
-async def _initial_plan(state: AgentState, llm, memory_view: str, model_name: str) -> AgentState:
-    """Generate the initial plan."""
-    system_prompt = """You are a planning assistant that breaks down user queries into structured execution plans.
+_INITIAL_PLAN_PROMPT = """You are a planning assistant that breaks down user queries into structured execution plans.
 
 Given a user query and the conversation history, create a step-by-step plan to answer it.
 
@@ -71,11 +43,11 @@ Available tools and when to use them:
    Use for questions about DATA in the Chinook music store database:
    - Sales data, revenue, quantities, counts
    - Customer information, employee data
-   - Track/album/artist information
+   - Track/album/artist DATA (counts, IDs, relationships - NOT descriptions or background info)
    - Invoice and invoice line details
    - Aggregations, sums, averages, counts
    - Filtering by date, genre, artist, etc.
-   Examples: "How many tracks in Latin genre?", "Total revenue in 2013", "Which artist has most albums?"
+   Examples: "How many tracks in Latin genre?", "Total revenue in 2013", "Which artist has most albums?", "Average tracks per album for Body Count"
    
    Note: The sql_tool automatically includes the database schema (table names, columns, relationships) 
    when generating SQL queries, so you don't need a separate step to fetch the schema.
@@ -87,15 +59,18 @@ Available tools and when to use them:
    - Currency conversion rates and policies
    - Store policies and procedures
    - General knowledge about the music store
+   - Artist information (background, descriptions, history - NOT data like counts or IDs)
    - Information that is NOT in the database but in knowledge documents
    
    The document store contains:
    - music_store_info.txt: General company information, business model, founding date
    - pricing_policy.txt: Pricing structure, currency conversion rates (EUR/USD, GBP/USD, etc.)
    - genre_information.txt: Information about music genres, genre statistics
+   - artist_information.txt: Background information, descriptions, and details about artists
    
    Examples: "What is the currency conversion rate?", "What is the store's pricing policy?", 
-   "What currencies does the store accept?", "When was the store founded?"
+   "What currencies does the store accept?", "When was the store founded?", 
+   "What information does the store have about Body Count?", "Tell me about the artist Caetano Veloso"
 
 3. api_tool (API Tool):
    Use for:
@@ -109,14 +84,145 @@ Available tools and when to use them:
    you should FIRST use rag_tool to retrieve the policy/rates, THEN use api_tool to perform the conversion.
 
 Planning strategy:
-- If a query needs DATA from the database → use sql_tool
-- If a query needs KNOWLEDGE/POLICY information → use rag_tool
+- If a query needs DATA from the database (counts, averages, revenue, etc.) → use sql_tool
+- If a query needs KNOWLEDGE/POLICY information (artist descriptions, company info, policies) → use rag_tool
 - If a query needs to PERFORM a calculation/operation → use api_tool
+- IMPORTANT: Artist information queries:
+  * Use sql_tool for artist DATA (e.g., "average tracks per album for Body Count")
+  * Use rag_tool for artist KNOWLEDGE (e.g., "what information does the store have about Body Count")
 - If a query needs multiple pieces of information, plan multiple tool calls in sequence
 - Always end with an "answer" step to synthesize the results
 
 Return ONLY valid JSON, no markdown, no explanation."""
 
+
+_REPLAN_PROMPT = """You are a sophisticated planning assistant that reviews agent execution.
+
+Your goal is to check if the current plan execution has gathered enough correct information to answer the user's query, and if not, propose concrete new TOOL CALL steps.
+
+Available tools and when to use them:
+
+1. sql_tool (Database Query Tool):
+   Use for questions about DATA in the Chinook music store database:
+   - Sales data, revenue, quantities, counts
+   - Customer information, employee data
+   - Track/album/artist DATA (counts, IDs, relationships - NOT descriptions or background info)
+   - Invoice and invoice line details
+   - Aggregations, sums, averages, counts
+   - Filtering by date, genre, artist, etc.
+   Examples: "How many tracks in Latin genre?", "Total revenue in 2013", "Which artist has most albums?", "Average tracks per album for Body Count"
+   
+   Note: The sql_tool automatically includes the database schema (table names, columns, relationships) 
+   when generating SQL queries, so you don't need a separate step to fetch the schema.
+
+2. rag_tool (Document Retrieval Tool):
+   Use for questions about KNOWLEDGE, POLICIES, or GENERAL INFORMATION stored in documents:
+   - Company information and business details
+   - Pricing policies and structures
+   - Currency conversion rates and policies
+   - Store policies and procedures
+   - General knowledge about the music store
+   - Artist information (background, descriptions, history - NOT data like counts or IDs)
+   - Information that is NOT in the database but in knowledge documents
+   
+   The document store contains:
+   - music_store_info.txt: General company information, business model, founding date
+   - pricing_policy.txt: Pricing structure, currency conversion rates (EUR/USD, GBP/USD, etc.)
+   - genre_information.txt: Information about music genres, genre statistics
+   - artist_information.txt: Background information, descriptions, and details about artists
+   
+   Examples: "What is the currency conversion rate?", "What is the store's pricing policy?", 
+   "What currencies does the store accept?", "When was the store founded?", 
+   "What information does the store have about Body Count?", "Tell me about the artist Caetano Veloso"
+
+3. api_tool (API Tool):
+   Use for:
+   - Currency conversion calculations (USD to EUR, GBP, JPY, CAD, AUD and vice versa)
+   - Weather information (placeholder)
+   - Other external API operations
+   
+   Examples: "Convert 100 USD to EUR", "What is the weather in San Francisco?"
+   
+   Note: If a query asks about currency conversion AND mentions "based on store's currency policy",
+   you should FIRST use rag_tool to retrieve the policy/rates, THEN use api_tool to perform the conversion.
+
+Review the:
+1. User Query
+2. Execution History (tool inputs/outputs/errors)
+3. Current Plan
+
+Decide:
+- Is the information sufficient and correct?
+- Did any tool call fail or return incorrect data?
+- Is some needed information simply missing from all sources?
+- Do we need to add new steps to fix errors or get missing info?
+
+IMPORTANT BEHAVIOR FOR NEW STEPS:
+
+- If information is missing and can only be obtained from TOOLS, you MUST add "tool_call" steps (NOT just "think").
+- Use:
+  - sql_tool when the missing data likely lives in the database (e.g., prices, counts, averages).
+  - rag_tool when we should refine or re-run a document retrieval.
+  - api_tool when we need to convert between currencies using known rates.
+- "think" steps are ONLY for:
+  - Re-interpreting or combining EXISTING tool results
+  - Performing calculations using numbers we already have
+  They MUST NOT be used to invent new missing numbers.
+
+When adding new steps, consider alternative strategies:
+- If a document query failed to give a numeric value, consider using sql_tool to compute it directly from the database.
+- If you retrieved exchange rates from RAG, use api_tool to perform the actual currency conversion.
+- Avoid adding multiple "think" steps if they do not introduce new TOOL outputs.
+
+Output a JSON object:
+{
+  "is_ready_for_answer": boolean,
+  "reasoning": "Explanation of your decision",
+  "feedback": "Critique or feedback for the next tool execution (if needed), e.g., 'The last SQL query failed because table X doesn't exist'",
+  "new_steps": [
+    {
+      "id": 1,
+      "description": "Fix step description",
+      "action_type": "tool_call" | "think",
+      "tool": "sql_tool" | "rag_tool" | "api_tool" | null,
+      "query": "Specific query for this step (required for tool_call steps)"
+    }
+  ]
+}
+
+If "is_ready_for_answer" is true, "new_steps" should be empty.
+If the required information truly does not exist in any tool output or documents, set "is_ready_for_answer" to true and explain in "reasoning" what is missing and why it cannot be obtained.
+The "feedback" field is crucial for helping downstream tools correct their mistakes."""
+
+
+async def planner_node(state: AgentState) -> AgentState:
+    """
+    Planner node: creates a structured plan from the user query.
+    
+    Two modes:
+    1. Initial planning: Creates the first plan.
+    2. Replanning: Analyzes previous execution, adds correction steps if needed.
+    """
+    # Check if we are replanning (plan already exists)
+    is_replanning = state.get("plan") is not None and "steps" in state.get("plan", {})
+    
+    # Build memory view for context
+    memory_view = build_memory_view(state)
+    
+    # Initialize LLM
+    import os
+    config = state.get("config", {})
+    model_name = config.get("planner_model") or os.getenv("PLANNER_MODEL") or config.get("model_name", "gpt-4o-mini")
+    llm, actual_model_name = init_llm(model_name)
+    
+    if is_replanning:
+        return await _replan(state, llm, memory_view, actual_model_name)
+    else:
+        return await _initial_plan(state, llm, memory_view, actual_model_name)
+
+
+async def _initial_plan(state: AgentState, llm, memory_view: str, model_name: str) -> AgentState:
+    """Generate the initial plan."""
     user_prompt = f"""User query: {state["user_query"]}
 
 Conversation history:
@@ -125,9 +231,8 @@ Conversation history:
 Create a plan to answer the user's query. Output the JSON plan."""
 
     try:
-        # Prepare messages
         messages = [
-            SystemMessage(content=system_prompt),
+            SystemMessage(content=_INITIAL_PLAN_PROMPT),
             HumanMessage(content=user_prompt)
         ]
         
@@ -202,105 +307,9 @@ Create a plan to answer the user's query. Output the JSON plan."""
 async def _replan(state: AgentState, llm, memory_view: str, model_name: str) -> AgentState:
     """Analyze execution and update plan if needed."""
     
-    # Increment replan count - this is called when we need to replan
-    state["replan_count"] = state.get("replan_count", 0) + 1
+    # Planner's job: analyze if we have enough info, set is_ready_for_answer, add new steps if needed
+    # Controller handles turn counting and loop prevention
     
-    system_prompt = """You are a sophisticated planning assistant that reviews agent execution.
-
-Your goal is to check if the current plan execution has gathered enough correct information to answer the user's query, and if not, propose concrete new TOOL CALL steps.
-
-Available tools and when to use them:
-
-1. sql_tool (Database Query Tool):
-   Use for questions about DATA in the Chinook music store database:
-   - Sales data, revenue, quantities, counts
-   - Customer information, employee data
-   - Track/album/artist information (including prices if stored in the DB)
-   - Invoice and invoice line details
-   - Aggregations, sums, averages, counts
-   - Filtering by date, genre, artist, etc.
-   Examples: "How many tracks in Latin genre?", "Total revenue in 2013", "Which artist has most albums?", "What is the average track price?"
-   
-   Note: The sql_tool automatically includes the database schema (table names, columns, relationships) 
-   when generating SQL queries, so you don't need a separate step to fetch the schema.
-
-2. rag_tool (Document Retrieval Tool):
-   Use for questions about KNOWLEDGE, POLICIES, or GENERAL INFORMATION stored in documents:
-   - Company information and business details
-   - Pricing policies and structures
-   - Currency conversion rates and policies
-   - Store policies and procedures
-   - General knowledge about the music store
-   - Information that is NOT in the database but in knowledge documents
-   
-   The document store contains:
-   - music_store_info.txt: General company information, business model, founding date
-   - pricing_policy.txt: Pricing structure, currency conversion rates (EUR/USD, GBP/USD, etc.)
-   - genre_information.txt: Information about music genres, genre statistics
-   
-   Examples: "What is the currency conversion rate?", "What is the store's pricing policy?", 
-   "What currencies does the store accept?", "When was the store founded?"
-
-3. api_tool (API Tool):
-   Use for:
-   - Currency conversion calculations (USD to EUR, GBP, JPY, CAD, AUD and vice versa)
-   - Weather information (placeholder)
-   - Other external API operations
-   
-   Examples: "Convert 100 USD to EUR", "What is the weather in San Francisco?"
-   
-   Note: If a query asks about currency conversion AND mentions "based on store's currency policy",
-   you should FIRST use rag_tool to retrieve the policy/rates, THEN use api_tool to perform the conversion.
-
-Review the:
-1. User Query
-2. Execution History (tool inputs/outputs/errors)
-3. Current Plan
-
-Decide:
-- Is the information sufficient and correct?
-- Did any tool call fail or return incorrect data?
-- Is some needed information simply missing from all sources?
-- Do we need to add new steps to fix errors or get missing info?
-
-IMPORTANT BEHAVIOR FOR NEW STEPS:
-
-- If information is missing and can only be obtained from TOOLS, you MUST add "tool_call" steps (NOT just "think").
-- Use:
-  - sql_tool when the missing data likely lives in the database (e.g., prices, counts, averages).
-  - rag_tool when we should refine or re-run a document retrieval.
-  - api_tool when we need to convert between currencies using known rates.
-- "think" steps are ONLY for:
-  - Re-interpreting or combining EXISTING tool results
-  - Performing calculations using numbers we already have
-  They MUST NOT be used to invent new missing numbers.
-
-When adding new steps, consider alternative strategies:
-- If a document query failed to give a numeric value, consider using sql_tool to compute it directly from the database.
-- If you retrieved exchange rates from RAG, use api_tool to perform the actual currency conversion.
-- Avoid adding multiple "think" steps if they do not introduce new TOOL outputs.
-
-Output a JSON object:
-{
-  "is_ready_for_answer": boolean,
-  "reasoning": "Explanation of your decision",
-  "feedback": "Critique or feedback for the next tool execution (if needed), e.g., 'The last SQL query failed because table X doesn't exist'",
-  "new_steps": [
-    {
-      "id": 1,
-      "description": "Fix step description",
-      "action_type": "tool_call" | "think",
-      "tool": "sql_tool" | "rag_tool" | "api_tool" | null,
-      "query": "Specific query for this step (required for tool_call steps)"
-    }
-  ]
-}
-
-If "is_ready_for_answer" is true, "new_steps" should be empty.
-If the required information truly does not exist in any tool output or documents, set "is_ready_for_answer" to true and explain in "reasoning" what is missing and why it cannot be obtained.
-The "feedback" field is crucial for helping downstream tools correct their mistakes.
-"""
-
     user_prompt = f"""User query: {state["user_query"]}
 
 Current Plan Status:
@@ -313,7 +322,7 @@ Analyze the execution. Are we ready to answer? If not, provide new steps and fee
 
     try:
         messages = [
-            SystemMessage(content=system_prompt),
+            SystemMessage(content=_REPLAN_PROMPT),
             HumanMessage(content=user_prompt)
         ]
         
@@ -337,22 +346,26 @@ Analyze the execution. Are we ready to answer? If not, provide new steps and fee
         new_steps = result.get("new_steps", [])
         feedback = result.get("feedback", "")
         
+        # Handle edge cases to prevent infinite loops
+        # If planner says ready, ignore any new_steps (shouldn't happen but be safe)
+        if is_ready:
+            state["is_ready_for_answer"] = True
+            state["feedback"] = feedback
         # If planner says not ready but provides no new steps, force readiness to prevent infinite loop
-        if not is_ready and not new_steps:
-            is_ready = True
-        
-        state["is_ready_for_answer"] = is_ready
-        state["feedback"] = feedback
-        
-        if not is_ready and new_steps:
+        elif not new_steps:
+            state["is_ready_for_answer"] = True
+            state["feedback"] = feedback or "Planner indicated not ready but provided no new steps - forcing readiness"
+        # If not ready and has new steps, add them
+        else:
+            state["is_ready_for_answer"] = False
+            state["feedback"] = feedback
             # Snapshot current plan before modification
             current_plan = copy.deepcopy(state["plan"])
             state.setdefault("plan_history", []).append(current_plan)
             
             steps = state["plan"]["steps"]
             
-            # We will append new steps at the end, and then jump the cursor to the first new step.
-            # This ensures they actually get executed next.
+            # Append new steps at the end
             insertion_index = len(steps)  # index of the first new step after append
             
             # Ensure IDs are unique/sequential based on previous last step
@@ -370,7 +383,7 @@ Analyze the execution. Are we ready to answer? If not, provide new steps and fee
                 step["id"] = last_id + i + 1
                 steps.append(step)
             
-            # IMPORTANT: move cursor to the first new step
+            # Move cursor to the first new step so they get executed next
             state["step_cursor"] = insertion_index
             
         create_trace_event(

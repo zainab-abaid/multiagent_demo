@@ -1,0 +1,1500 @@
+-- id 1000: How many albums does Bruce Dickinson have?
+SELECT COUNT(*) FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Bruce Dickinson'
+
+-- id 1001: How many tracks are in the Comedy genre?
+SELECT COUNT(*) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy'
+
+-- id 1002: What is the shortest track in milliseconds?
+SELECT MIN(Milliseconds) FROM Track
+
+-- id 1003: How many employees have the title 'Sales Manager'?
+SELECT COUNT(*) FROM Employee WHERE Title = 'Sales Manager'
+
+-- id 1004: What is the total revenue for 2011?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011'
+
+-- id 1005: How many invoices were issued in 2009?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2009'
+
+-- id 1006: What is the total number of bytes for all tracks?
+SELECT SUM(Bytes) FROM Track
+
+-- id 1007: How many different artists are there?
+SELECT COUNT(*) FROM Artist
+
+-- id 1008: How many customers are there?
+SELECT COUNT(*) FROM Customer
+
+-- id 1009: How many albums does Black Sabbath have?
+SELECT COUNT(*) FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Black Sabbath'
+
+-- id 1010: What is the highest invoice total?
+SELECT MAX(Total) FROM Invoice
+
+-- id 1011: How many invoicelines are there?
+SELECT COUNT(*) FROM InvoiceLine
+
+-- id 1012: What is the average track length in milliseconds?
+SELECT ROUND(AVG(Milliseconds), 0) FROM Track
+
+-- id 1013: What is the average unit price of tracks?
+SELECT ROUND(AVG(UnitPrice), 2) FROM Track
+
+-- id 1014: Count the employees.
+SELECT COUNT(*) FROM Employee
+
+-- id 1015: What is the average invoice total?
+SELECT ROUND(AVG(Total), 2) FROM Invoice
+
+-- id 1016: What is the total number of invoices?
+SELECT COUNT(*) FROM Invoice
+
+-- id 1017: How many employees have the title 'IT Manager'?
+SELECT COUNT(*) FROM Employee WHERE Title = 'IT Manager'
+
+-- id 1018: How many invoices were issued in 2011?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011'
+
+-- id 1019: How many different genres are there?
+SELECT COUNT(*) FROM Genre
+
+-- id 1020: What is the lowest invoice total?
+SELECT MIN(Total) FROM Invoice
+
+-- id 1021: What is the total quantity of items sold?
+SELECT SUM(Quantity) FROM InvoiceLine
+
+-- id 1022: What is the total number of playlists?
+SELECT COUNT(*) FROM Playlist
+
+-- id 1023: How many albums are there?
+SELECT COUNT(*) FROM Album
+
+-- id 1024: How many albums does Frank Zappa & Captain Beefheart have?
+SELECT COUNT(*) FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Frank Zappa & Captain Beefheart'
+
+-- id 1025: What is the longest track in milliseconds?
+SELECT MAX(Milliseconds) FROM Track
+
+-- id 1026: How many tracks are in the Science Fiction genre?
+SELECT COUNT(*) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Science Fiction'
+
+-- id 1027: How many genres are there?
+SELECT COUNT(*) FROM Genre
+
+-- id 1028: How many employees have the title 'Sales Support Agent'?
+SELECT COUNT(*) FROM Employee WHERE Title = 'Sales Support Agent'
+
+-- id 1029: How many albums does Gilberto Gil have?
+SELECT COUNT(*) FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Gilberto Gil'
+
+-- id 1030: How many invoices were issued in 2013?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013'
+
+-- id 1031: How many tracks are in the Rock And Roll genre?
+SELECT COUNT(*) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock And Roll'
+
+-- id 1032: How many artists are there?
+SELECT COUNT(*) FROM Artist
+
+-- id 1033: How many invoices were issued in 2010?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2010'
+
+-- id 1034: What is the total revenue for 2013?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013'
+
+-- id 1035: What is the total revenue from all invoices?
+SELECT ROUND(SUM(Total), 2) FROM Invoice
+
+-- id 1036: How many tracks are in the R&B/Soul genre?
+SELECT COUNT(*) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'R&B/Soul'
+
+-- id 1037: How many different countries do customers come from?
+SELECT COUNT(DISTINCT Country) FROM Customer WHERE Country IS NOT NULL
+
+-- id 1038: Count the customers.
+SELECT COUNT(*) FROM Customer
+
+-- id 1039: Count the playlists.
+SELECT COUNT(*) FROM Playlist
+
+-- id 1040: How many customers are from France?
+SELECT COUNT(*) FROM Customer WHERE Country = 'France'
+
+-- id 1041: How many employees have the title 'General Manager'?
+SELECT COUNT(*) FROM Employee WHERE Title = 'General Manager'
+
+-- id 1042: What is the total number of tracks?
+SELECT COUNT(*) FROM Track
+
+-- id 1043: How many customers are from Argentina?
+SELECT COUNT(*) FROM Customer WHERE Country = 'Argentina'
+
+-- id 1044: Count the artists.
+SELECT COUNT(*) FROM Artist
+
+-- id 1045: How many albums does Milton Nascimento & Bebeto have?
+SELECT COUNT(*) FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Milton Nascimento & Bebeto'
+
+-- id 1046: How many tracks are in the Alternative & Punk genre?
+SELECT COUNT(*) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative & Punk'
+
+-- id 1047: How many albums does Chico Buarque have?
+SELECT COUNT(*) FROM Album a JOIN Artist ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Chico Buarque'
+
+-- id 1048: How many customers are from USA?
+SELECT COUNT(*) FROM Customer WHERE Country = 'USA'
+
+-- id 1049: How many customers are from Norway?
+SELECT COUNT(*) FROM Customer WHERE Country = 'Norway'
+
+-- id 2000: Which employee has the most customers assigned?
+SELECT e.FirstName || ' ' || e.LastName FROM Customer c JOIN Employee e ON c.SupportRepId = e.EmployeeId GROUP BY e.EmployeeId, e.FirstName, e.LastName ORDER BY COUNT(*) DESC, e.FirstName || ' ' || e.LastName ASC LIMIT 1
+
+-- id 2001: Which artist has released the most albums?
+SELECT ar.Name FROM Artist ar JOIN Album al ON ar.ArtistId = al.ArtistId GROUP BY ar.ArtistId, ar.Name ORDER BY COUNT(*) DESC, ar.Name ASC LIMIT 1
+
+-- id 2002: What is the total revenue from Canada?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Canada'
+
+-- id 2003: Which genre has the most tracks?
+SELECT g.Name FROM Track t JOIN Genre g ON t.GenreId = g.GenreId GROUP BY g.Name ORDER BY COUNT(*) DESC, g.Name ASC LIMIT 1
+
+-- id 2004: Which country generated the most revenue?
+SELECT c.Country FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country ORDER BY SUM(i.Total) DESC, c.Country ASC LIMIT 1
+
+-- id 2005: What is the average invoice total for customers in Netherlands?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Netherlands'
+
+-- id 2006: What is the total revenue from France?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'France'
+
+-- id 2007: Which customer has the highest total spending?
+SELECT c.FirstName || ' ' || c.LastName FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId GROUP BY c.CustomerId, c.FirstName, c.LastName ORDER BY SUM(i.Total) DESC, c.FirstName || ' ' || c.LastName ASC LIMIT 1
+
+-- id 2008: How many tracks use the Protected MPEG-4 video file media type?
+SELECT COUNT(*) FROM Track t JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected MPEG-4 video file'
+
+-- id 2009: What is the total revenue for 2009?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2009'
+
+-- id 2010: Which city has the highest number of customers?
+SELECT City FROM Customer WHERE City IS NOT NULL GROUP BY City ORDER BY COUNT(*) DESC, City ASC LIMIT 1
+
+-- id 2011: What is the average invoice total for customers in Chile?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Chile'
+
+-- id 2012: Which support agent has customers with the highest total spending?
+SELECT e.FirstName || ' ' || e.LastName FROM Customer c JOIN Employee e ON c.SupportRepId = e.EmployeeId JOIN Invoice i ON c.CustomerId = i.CustomerId GROUP BY e.EmployeeId, e.FirstName, e.LastName ORDER BY SUM(i.Total) DESC, e.FirstName || ' ' || e.LastName ASC LIMIT 1
+
+-- id 2013: How many tracks are in the TV Shows playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'TV Shows'
+
+-- id 2014: What is the average invoice total for customers in United Kingdom?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'United Kingdom'
+
+-- id 2015: How many invoices were issued in 2013?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013'
+
+-- id 2016: What is the total revenue from Belgium?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Belgium'
+
+-- id 2017: What is the total revenue for 2013?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013'
+
+-- id 2018: What is the total revenue from Metal tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Metal'
+
+-- id 2019: How many tracks are in the Movies playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Movies'
+
+-- id 2020: Which country has the most customers?
+SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country ORDER BY COUNT(*) DESC, Country ASC LIMIT 1
+
+-- id 2021: How many invoices were issued in 2010?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2010'
+
+-- id 2022: How many tracks use the MPEG audio file media type?
+SELECT COUNT(*) FROM Track t JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'MPEG audio file'
+
+-- id 2023: How many tracks are in the Grunge playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Grunge'
+
+-- id 2024: How many tracks use the Protected AAC audio file media type?
+SELECT COUNT(*) FROM Track t JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected AAC audio file'
+
+-- id 2025: What is the average invoice total for customers in Czech Republic?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Czech Republic'
+
+-- id 2026: What is the total revenue from Australia?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Australia'
+
+-- id 2027: What is the total revenue from Alternative tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative'
+
+-- id 2028: How many tracks are in the 90’s Music playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = '90’s Music'
+
+-- id 2029: How many invoices were issued in 2012?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2012'
+
+-- id 2030: What is the total revenue for 2010?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2010'
+
+-- id 2031: What is the average track length in minutes for Latin?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Latin'
+
+-- id 2032: What is the average invoice total for customers in Austria?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Austria'
+
+-- id 2033: What is the average invoice total for customers in Italy?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Italy'
+
+-- id 2034: What is the average track length in minutes for Easy Listening?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Easy Listening'
+
+-- id 2035: How many invoices does Jennifer Peterson have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Jennifer' AND c.LastName = 'Peterson'
+
+-- id 2036: What is the total revenue from Soundtrack tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack'
+
+-- id 2037: How many invoices does Kara Nielsen have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Kara' AND c.LastName = 'Nielsen'
+
+-- id 2038: How many tracks are in the Classical playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Classical'
+
+-- id 2039: How many invoices does Michelle Brooks have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Michelle' AND c.LastName = 'Brooks'
+
+-- id 2040: What is the total revenue from Sweden?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Sweden'
+
+-- id 2041: What is the average track length in minutes for TV Shows?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'TV Shows'
+
+-- id 2042: What is the total revenue from Blues tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Blues'
+
+-- id 2043: How many invoices does Astrid Gruber have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Astrid' AND c.LastName = 'Gruber'
+
+-- id 2044: What is the average invoice total for customers in Sweden?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Sweden'
+
+-- id 2045: What is the total revenue from Italy?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Italy'
+
+-- id 2046: What is the average track length in minutes for Soundtrack?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack'
+
+-- id 2047: How many invoices does Dan Miller have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Dan' AND c.LastName = 'Miller'
+
+-- id 2048: How many tracks are in the Classical 101 - The Basics playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Classical 101 - The Basics'
+
+-- id 2049: What is the average invoice total for customers in Portugal?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Portugal'
+
+-- id 2050: What is the total revenue from Brazil?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Brazil'
+
+-- id 2051: How many invoices does Jack Smith have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Jack' AND c.LastName = 'Smith'
+
+-- id 2052: What is the total revenue for 2011?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011'
+
+-- id 2053: How many invoices does Luís Gonçalves have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Luís' AND c.LastName = 'Gonçalves'
+
+-- id 2054: What is the average track length in minutes for World?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World'
+
+-- id 2055: What is the average track length in minutes for Classical?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Classical'
+
+-- id 2056: How many invoices does Eduardo Martins have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Eduardo' AND c.LastName = 'Martins'
+
+-- id 2057: What is the average invoice total for customers in Belgium?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Belgium'
+
+-- id 2058: How many tracks use the Purchased AAC audio file media type?
+SELECT COUNT(*) FROM Track t JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Purchased AAC audio file'
+
+-- id 2059: How many invoices does Daan Peeters have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Daan' AND c.LastName = 'Peeters'
+
+-- id 2060: What is the average track length in minutes for Rock?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock'
+
+-- id 2061: How many tracks are in the Music playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Music'
+
+-- id 2062: What is the total revenue from India?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'India'
+
+-- id 2063: What is the average track length in minutes for Metal?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Metal'
+
+-- id 2064: What is the average track length in minutes for Comedy?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy'
+
+-- id 2065: How many invoices were issued in 2011?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011'
+
+-- id 2066: What is the average invoice total for customers in Germany?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Germany'
+
+-- id 2067: What is the average track length in minutes for Opera?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Opera'
+
+-- id 2068: What is the total revenue from Netherlands?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Netherlands'
+
+-- id 2069: How many tracks use the AAC audio file media type?
+SELECT COUNT(*) FROM Track t JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'AAC audio file'
+
+-- id 2070: What is the total revenue for 2012?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2012'
+
+-- id 2071: What is the total revenue from United Kingdom?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'United Kingdom'
+
+-- id 2072: What is the total revenue from Easy Listening tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Easy Listening'
+
+-- id 2073: How many invoices does Frank Harris have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Frank' AND c.LastName = 'Harris'
+
+-- id 2074: What is the average invoice total for customers in Argentina?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Argentina'
+
+-- id 2075: What is the average track length in minutes for Hip Hop/Rap?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Hip Hop/Rap'
+
+-- id 2076: How many invoices were issued in 2009?
+SELECT COUNT(*) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2009'
+
+-- id 2077: What is the total revenue from Drama tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Drama'
+
+-- id 2078: What is the average track length in minutes for Electronica/Dance?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Electronica/Dance'
+
+-- id 2079: What is the average invoice total for customers in Ireland?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Ireland'
+
+-- id 2080: How many tracks are in the Music Videos playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Music Videos'
+
+-- id 2081: What is the total revenue from Rock And Roll tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock And Roll'
+
+-- id 2082: What is the average invoice total for customers in Spain?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Spain'
+
+-- id 2083: How many tracks are in the Heavy Metal Classic playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Heavy Metal Classic'
+
+-- id 2084: How many invoices does Leonie Köhler have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Leonie' AND c.LastName = 'Köhler'
+
+-- id 2085: How many invoices does Alexandre Rocha have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Alexandre' AND c.LastName = 'Rocha'
+
+-- id 2086: What is the total revenue from Poland?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Poland'
+
+-- id 2087: What is the total revenue from Hip Hop/Rap tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Hip Hop/Rap'
+
+-- id 2088: What is the average track length in minutes for Reggae?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Reggae'
+
+-- id 2089: How many invoices does Roberto Almeida have?
+SELECT COUNT(*) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.FirstName = 'Roberto' AND c.LastName = 'Almeida'
+
+-- id 2090: How many tracks are in the On-The-Go 1 playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'On-The-Go 1'
+
+-- id 2091: How many tracks are in the Classical 101 - Next Steps playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Classical 101 - Next Steps'
+
+-- id 2092: What is the average track length in minutes for Pop?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Pop'
+
+-- id 2093: What is the average invoice total for customers in India?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'India'
+
+-- id 2094: What is the total revenue from Norway?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Norway'
+
+-- id 2095: What is the total revenue from Portugal?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country = 'Portugal'
+
+-- id 2096: What is the average track length in minutes for Drama?
+SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Drama'
+
+-- id 2097: What is the total revenue from World tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World'
+
+-- id 2098: How many tracks are in the Classical 101 - Deep Cuts playlist?
+SELECT COUNT(*) FROM PlaylistTrack pt JOIN Playlist p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Classical 101 - Deep Cuts'
+
+-- id 2099: What is the total revenue from Comedy tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy'
+
+-- id 3000: How many employees report to Michael Mitchell?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Michael' AND LastName = 'Mitchell')
+
+-- id 3001: What is the total revenue from Protected MPEG-4 video file tracks in 2010?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected MPEG-4 video file' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3002: Which tracks have never been purchased?
+SELECT COUNT(*) FROM Track t WHERE t.TrackId NOT IN (SELECT DISTINCT TrackId FROM InvoiceLine)
+
+-- id 3003: What is the total quantity of Blues tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Blues' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3004: What is the total revenue from tracks composed by Bert Russell/Phil Medley?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Bert Russell/Phil Medley'
+
+-- id 3005: What is the rank of Austria by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Austria'
+
+-- id 3006: What is the month with the highest revenue in 2013?
+SELECT strftime('%m', InvoiceDate) as Month FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013' GROUP BY Month ORDER BY SUM(Total) DESC, Month ASC LIMIT 1
+
+-- id 3007: How many employees report to Margaret Park?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Margaret' AND LastName = 'Park')
+
+-- id 3008: What is the total revenue for the first month of 2013?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013' AND strftime('%m', InvoiceDate) = '01'
+
+-- id 3009: What is the total revenue from tracks composed by Jerry Cantrell, Michael Starr, Layne Staley?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Jerry Cantrell, Michael Starr, Layne Staley'
+
+-- id 3010: What is the average number of line items per invoice?
+SELECT ROUND(AVG(line_count), 2) FROM (SELECT COUNT(*) as line_count FROM InvoiceLine GROUP BY InvoiceId)
+
+-- id 3011: Which playlist contains tracks from the most different artists?
+SELECT p.Name FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId GROUP BY p.PlaylistId, p.Name ORDER BY COUNT(DISTINCT ar.ArtistId) DESC, p.Name ASC LIMIT 1
+
+-- id 3012: Which customer has the highest average invoice total?
+SELECT c.FirstName || ' ' || c.LastName FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId GROUP BY c.CustomerId, c.FirstName, c.LastName ORDER BY AVG(i.Total) DESC, c.FirstName || ' ' || c.LastName ASC LIMIT 1
+
+-- id 3013: What is the total revenue from Purchased AAC audio file tracks in 2011?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Purchased AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3014: What is the total length in minutes of all tracks in albums by Alice In Chains?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Alice In Chains'
+
+-- id 3015: Which customer has purchased the most different genres?
+SELECT c.FirstName || ' ' || c.LastName FROM Customer c JOIN Invoice i ON c.CustomerId = i.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId GROUP BY c.CustomerId, c.FirstName, c.LastName ORDER BY COUNT(DISTINCT g.GenreId) DESC, c.FirstName || ' ' || c.LastName ASC LIMIT 1
+
+-- id 3016: What is the average number of tracks per invoice for Brazil?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Brazil' GROUP BY i.InvoiceId)
+
+-- id 3017: What is the total revenue generated from Classical tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Classical'
+
+-- id 3018: Which customers have never placed an invoice?
+SELECT COUNT(*) FROM Customer c WHERE c.CustomerId NOT IN (SELECT DISTINCT CustomerId FROM Invoice)
+
+-- id 3019: What is the total length in minutes of the Audiobooks playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Audiobooks'
+
+-- id 3020: Which album has the most tracks?
+SELECT al.Title FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId GROUP BY al.AlbumId, al.Title ORDER BY COUNT(*) DESC, al.Title ASC LIMIT 1
+
+-- id 3021: What is the total revenue generated from Reggae tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Reggae'
+
+-- id 3022: Which customer has purchased tracks from the most different artists?
+SELECT c.FirstName || ' ' || c.LastName FROM Customer c JOIN Invoice i ON c.CustomerId = i.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId GROUP BY c.CustomerId, c.FirstName, c.LastName ORDER BY COUNT(DISTINCT ar.ArtistId) DESC, c.FirstName || ' ' || c.LastName ASC LIMIT 1
+
+-- id 3023: Which playlist has tracks from the most different albums?
+SELECT p.Name FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId JOIN Album al ON t.AlbumId = al.AlbumId GROUP BY p.PlaylistId, p.Name ORDER BY COUNT(DISTINCT al.AlbumId) DESC, p.Name ASC LIMIT 1
+
+-- id 3024: What is the total revenue from customers who have placed more than 8 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 8)
+
+-- id 3025: What is the total length in minutes of the 90’s Music playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = '90’s Music'
+
+-- id 3026: How many tracks were composed by Deaffy & R.A. Smith-Diesel?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Deaffy & R.A. Smith-Diesel'
+
+-- id 3027: How many employees report to Laura Callahan?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Laura' AND LastName = 'Callahan')
+
+-- id 3028: Which invoice has the most line items?
+SELECT InvoiceId FROM InvoiceLine GROUP BY InvoiceId ORDER BY COUNT(*) DESC, InvoiceId ASC LIMIT 1
+
+-- id 3029: What is the total revenue generated from Heavy Metal tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Heavy Metal'
+
+-- id 3030: What is the total length in minutes of the Music playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Music'
+
+-- id 3031: Which artist's tracks have generated the most revenue?
+SELECT ar.Name FROM Artist ar JOIN Album al ON ar.ArtistId = al.ArtistId JOIN Track t ON al.AlbumId = t.AlbumId JOIN InvoiceLine il ON t.TrackId = il.TrackId GROUP BY ar.ArtistId, ar.Name ORDER BY SUM(il.UnitPrice * il.Quantity) DESC, ar.Name ASC LIMIT 1
+
+-- id 3032: What is the rank of Chile by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Chile'
+
+-- id 3033: What is the total length in minutes of the Movies playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Movies'
+
+-- id 3034: What is the average number of tracks per invoice for Norway?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Norway' GROUP BY i.InvoiceId)
+
+-- id 3035: What is the total quantity of Easy Listening tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Easy Listening' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3036: How many unique customers made purchases in 2012?
+SELECT COUNT(DISTINCT CustomerId) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2012'
+
+-- id 3037: What is the rank of Belgium by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Belgium'
+
+-- id 3038: Which genre has the highest average track price?
+SELECT g.Name FROM Track t JOIN Genre g ON t.GenreId = g.GenreId GROUP BY g.GenreId, g.Name ORDER BY AVG(t.UnitPrice) DESC, g.Name ASC LIMIT 1
+
+-- id 3039: What is the month with the highest revenue in 2010?
+SELECT strftime('%m', InvoiceDate) as Month FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2010' GROUP BY Month ORDER BY SUM(Total) DESC, Month ASC LIMIT 1
+
+-- id 3040: What is the average number of tracks per invoice for Netherlands?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Netherlands' GROUP BY i.InvoiceId)
+
+-- id 3041: What is the total revenue for the first month of 2009?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2009' AND strftime('%m', InvoiceDate) = '01'
+
+-- id 3042: How many unique customers made purchases in 2011?
+SELECT COUNT(DISTINCT CustomerId) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011'
+
+-- id 3043: What is the total length in minutes of all tracks in albums by Cláudio Zoli?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Cláudio Zoli'
+
+-- id 3044: How many tracks were composed by Jerry Cantrell, Michael Starr, Sean Kinney?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Jerry Cantrell, Michael Starr, Sean Kinney'
+
+-- id 3045: What is the total revenue from customers who have placed more than 10 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 10)
+
+-- id 3046: What is the total revenue from AAC audio file tracks in 2012?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3047: What is the average number of tracks per invoice for Belgium?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Belgium' GROUP BY i.InvoiceId)
+
+-- id 3048: What is the total revenue from customers assigned to Steve Johnson?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Steve' AND e.LastName = 'Johnson'
+
+-- id 3049: What is the total length in minutes of all tracks in albums by Chico Buarque?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Chico Buarque'
+
+-- id 3050: What is the total revenue generated from Jazz tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Jazz'
+
+-- id 3051: What is the total revenue generated from Blues tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Blues'
+
+-- id 3052: What is the total revenue from Protected AAC audio file tracks in 2013?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3053: What is the total quantity of Reggae tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Reggae' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3054: How many employees report to Jane Peacock?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Jane' AND LastName = 'Peacock')
+
+-- id 3055: What is the total revenue generated from Electronica/Dance tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Electronica/Dance'
+
+-- id 3056: What is the total revenue generated from Pop tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Pop'
+
+-- id 3057: How many unique customers made purchases in 2009?
+SELECT COUNT(DISTINCT CustomerId) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2009'
+
+-- id 3058: What is the total quantity of Jazz tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Jazz' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3059: What is the total revenue from Purchased AAC audio file tracks in 2012?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Purchased AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3060: How many unique customers made purchases in 2010?
+SELECT COUNT(DISTINCT CustomerId) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2010'
+
+-- id 3061: What is the total revenue from tracks composed by Steven Tyler, Jim Vallance?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Jim Vallance'
+
+-- id 3062: What is the total revenue from customers assigned to Laura Callahan?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Laura' AND e.LastName = 'Callahan'
+
+-- id 3063: What is the average invoice total for customers in countries with more than 4 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 4)
+
+-- id 3064: What is the average number of tracks per invoice for Argentina?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Argentina' GROUP BY i.InvoiceId)
+
+-- id 3065: What is the total revenue from AAC audio file tracks in 2010?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3066: What is the total revenue from tracks composed by Apocalyptica?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Apocalyptica'
+
+-- id 3067: What is the month with the highest revenue in 2011?
+SELECT strftime('%m', InvoiceDate) as Month FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011' GROUP BY Month ORDER BY SUM(Total) DESC, Month ASC LIMIT 1
+
+-- id 3068: What is the total revenue generated from R&B/Soul tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'R&B/Soul'
+
+-- id 3069: What is the average number of tracks per invoice for Denmark?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Denmark' GROUP BY i.InvoiceId)
+
+-- id 3070: What is the total revenue generated from Alternative tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative'
+
+-- id 3071: What is the total revenue for the first month of 2011?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2011' AND strftime('%m', InvoiceDate) = '01'
+
+-- id 3072: What is the total length in minutes of all tracks in albums by João Gilberto?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'João Gilberto'
+
+-- id 3073: What is the total revenue from customers who have placed more than 7 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 7)
+
+-- id 3074: What is the rank of Sweden by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Sweden'
+
+-- id 3075: How many tracks were composed by Steven Tyler, Joe Perry, Jim Vallance, Holly Knight?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry, Jim Vallance, Holly Knight'
+
+-- id 3076: What is the total revenue from customers who have placed more than 5 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 5)
+
+-- id 3077: What is the total revenue for the first month of 2012?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2012' AND strftime('%m', InvoiceDate) = '01'
+
+-- id 3078: What is the rank of Czech Republic by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Czech Republic'
+
+-- id 3079: What is the average number of tracks per album for Bebel Gilberto?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Bebel Gilberto' GROUP BY al.AlbumId)
+
+-- id 3080: What is the average number of tracks per invoice for Ireland?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Ireland' GROUP BY i.InvoiceId)
+
+-- id 3081: What is the total revenue generated from Drama tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Drama'
+
+-- id 3082: What is the average invoice total for customers in countries with more than 8 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 8)
+
+-- id 3083: What is the total revenue from Protected MPEG-4 video file tracks in 2013?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected MPEG-4 video file' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3084: How many employees report to Steve Johnson?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Steve' AND LastName = 'Johnson')
+
+-- id 3085: What is the total revenue from tracks composed by Eddie Cochran/Jerry Capehart?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Eddie Cochran/Jerry Capehart'
+
+-- id 3086: What is the total revenue from Protected MPEG-4 video file tracks in 2011?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected MPEG-4 video file' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3087: What is the total revenue from tracks composed by Jerry Cantrell, Layne Staley?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Jerry Cantrell, Layne Staley'
+
+-- id 3088: What is the average number of tracks per invoice for United Kingdom?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'United Kingdom' GROUP BY i.InvoiceId)
+
+-- id 3089: What is the total length in minutes of all tracks in albums by Antônio Carlos Jobim?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Antônio Carlos Jobim'
+
+-- id 3090: What is the rank of Denmark by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Denmark'
+
+-- id 3091: What is the average invoice total for customers in countries with more than 6 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 6)
+
+-- id 3092: How many employees report to Robert King?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Robert' AND LastName = 'King')
+
+-- id 3093: What is the rank of Hungary by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Hungary'
+
+-- id 3094: What is the total quantity of Jazz tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Jazz' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3095: What is the rank of Italy by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Italy'
+
+-- id 3096: What is the average invoice total for customers in countries with more than 5 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 5)
+
+-- id 3097: What is the total revenue from customers who have placed more than 4 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 4)
+
+-- id 3098: What is the average number of tracks per album for Gilberto Gil?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Gilberto Gil' GROUP BY al.AlbumId)
+
+-- id 3099: What is the total revenue from customers who have placed more than 3 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 3)
+
+-- id 3100: What is the total length in minutes of the Brazilian Music playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Brazilian Music'
+
+-- id 3101: What is the total revenue generated from Opera tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Opera'
+
+-- id 3102: What is the total revenue from tracks composed by Alanis Morissette & Glenn Ballard?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Alanis Morissette & Glenn Ballard'
+
+-- id 3103: What is the average number of tracks per album for Black Label Society?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Black Label Society' GROUP BY al.AlbumId)
+
+-- id 3104: What is the average number of tracks per invoice for Austria?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Austria' GROUP BY i.InvoiceId)
+
+-- id 3105: What is the average invoice total for customers in countries with more than 7 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 7)
+
+-- id 3106: What is the average number of tracks per invoice for Finland?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Finland' GROUP BY i.InvoiceId)
+
+-- id 3107: What is the average number of tracks per album for Buddy Guy?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Buddy Guy' GROUP BY al.AlbumId)
+
+-- id 3108: What is the total length in minutes of all tracks in albums by Various Artists?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Various Artists'
+
+-- id 3109: How many unique customers made purchases in 2013?
+SELECT COUNT(DISTINCT CustomerId) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2013'
+
+-- id 3110: What is the total revenue for the first month of 2010?
+SELECT ROUND(SUM(Total), 2) FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2010' AND strftime('%m', InvoiceDate) = '01'
+
+-- id 3111: What is the total revenue from tracks composed by Deaffy & R.A. Smith-Diesel?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Deaffy & R.A. Smith-Diesel'
+
+-- id 3112: How many tracks were composed by Steven Tyler, Joe Perry, Jim Vallance?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry, Jim Vallance'
+
+-- id 3113: What is the average number of tracks per album for Jorge Vercilo?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Jorge Vercilo' GROUP BY al.AlbumId)
+
+-- id 3114: What is the total revenue generated from Sci Fi & Fantasy tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Sci Fi & Fantasy'
+
+-- id 3115: What is the total length in minutes of all tracks in albums by Frank Zappa & Captain Beefheart?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Frank Zappa & Captain Beefheart'
+
+-- id 3116: How many tracks were composed by Steven Tyler, Joe Perry, Mark Hudson?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry, Mark Hudson'
+
+-- id 3117: What is the rank of Germany by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Germany'
+
+-- id 3118: What is the total revenue from customers assigned to Nancy Edwards?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Nancy' AND e.LastName = 'Edwards'
+
+-- id 3119: What is the total quantity of Latin tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Latin' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3120: What is the total length in minutes of the Classical playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Classical'
+
+-- id 3121: What is the average number of tracks per album for Frank Zappa & Captain Beefheart?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Frank Zappa & Captain Beefheart' GROUP BY al.AlbumId)
+
+-- id 3122: What is the total revenue from customers assigned to Margaret Park?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Margaret' AND e.LastName = 'Park'
+
+-- id 3123: What is the total length in minutes of all tracks in albums by Cidade Negra?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Cidade Negra'
+
+-- id 3124: What is the average invoice total for customers in countries with more than 3 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 3)
+
+-- id 3125: What is the total revenue from Protected AAC audio file tracks in 2011?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3126: How many employees report to Andrew Adams?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Andrew' AND LastName = 'Adams')
+
+-- id 3127: What is the average number of tracks per invoice for Germany?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Germany' GROUP BY i.InvoiceId)
+
+-- id 3128: What is the total quantity of Science Fiction tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Science Fiction' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3129: What is the month with the highest revenue in 2009?
+SELECT strftime('%m', InvoiceDate) as Month FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2009' GROUP BY Month ORDER BY SUM(Total) DESC, Month ASC LIMIT 1
+
+-- id 3130: What is the total revenue from customers assigned to Jane Peacock?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Jane' AND e.LastName = 'Peacock'
+
+-- id 3131: What is the total quantity of Pop tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Pop' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3132: What is the average number of tracks per album for Chico Science & Nação Zumbi?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Chico Science & Nação Zumbi' GROUP BY al.AlbumId)
+
+-- id 3133: What is the total quantity of R&B/Soul tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'R&B/Soul' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3134: How many tracks were composed by Alanis Morissette & Glenn Ballard?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Alanis Morissette & Glenn Ballard'
+
+-- id 3135: What is the month with the highest revenue in 2012?
+SELECT strftime('%m', InvoiceDate) as Month FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2012' GROUP BY Month ORDER BY SUM(Total) DESC, Month ASC LIMIT 1
+
+-- id 3136: What is the total quantity of Jazz tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Jazz' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3137: What is the total revenue generated from Rock And Roll tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock And Roll'
+
+-- id 3138: What is the average number of tracks per invoice for Czech Republic?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Czech Republic' GROUP BY i.InvoiceId)
+
+-- id 3139: What is the total length in minutes of all tracks in albums by Jorge Vercilo?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Jorge Vercilo'
+
+-- id 3140: What is the rank of Poland by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Poland'
+
+-- id 3141: What is the total quantity of Heavy Metal tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Heavy Metal' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3142: How many tracks were composed by Jerry Cantrell, Michael Starr, Layne Staley?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Jerry Cantrell, Michael Starr, Layne Staley'
+
+-- id 3143: What is the average number of tracks per invoice for Spain?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Spain' GROUP BY i.InvoiceId)
+
+-- id 3144: What is the total quantity of Bossa Nova tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Bossa Nova' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3145: What is the average invoice total for customers in countries with more than 10 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 10)
+
+-- id 3146: What is the average number of tracks per album for Milton Nascimento & Bebeto?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Milton Nascimento & Bebeto' GROUP BY al.AlbumId)
+
+-- id 3147: What is the average number of tracks per album for João Gilberto?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'João Gilberto' GROUP BY al.AlbumId)
+
+-- id 3148: What is the rank of India by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'India'
+
+-- id 3149: What is the total revenue from tracks composed by Steven Tyler, Joe Perry, Mark Hudson?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry, Mark Hudson'
+
+-- id 3150: What is the rank of Australia by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Australia'
+
+-- id 3151: What is the total revenue generated from Comedy tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy'
+
+-- id 3152: What is the total revenue generated from Rock tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock'
+
+-- id 3153: What is the total revenue from tracks composed by Steven Tyler, Joe Perry, Desmond Child?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry, Desmond Child'
+
+-- id 3154: What is the total quantity of Comedy tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3155: What is the total quantity of Soundtrack tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3156: What is the total length in minutes of all tracks in albums by Caetano Veloso?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Caetano Veloso'
+
+-- id 3157: What is the total revenue generated from Bossa Nova tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Bossa Nova'
+
+-- id 3158: What is the total revenue from AAC audio file tracks in 2011?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3159: What is the total revenue from Purchased AAC audio file tracks in 2010?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Purchased AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3160: What is the total revenue from Protected AAC audio file tracks in 2012?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3161: What is the total revenue generated from Alternative & Punk tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative & Punk'
+
+-- id 3162: What is the total length in minutes of the Heavy Metal Classic playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Heavy Metal Classic'
+
+-- id 3163: What is the total quantity of World tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3164: What is the average number of tracks per album for Alice In Chains?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Alice In Chains' GROUP BY al.AlbumId)
+
+-- id 3165: What is the total revenue from tracks composed by Steven Tyler, Richie Supa?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Richie Supa'
+
+-- id 3166: What is the total revenue from customers assigned to Robert King?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Robert' AND e.LastName = 'King'
+
+-- id 3167: What is the total revenue from tracks composed by Steven Tyler, Tom Hamilton?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Tom Hamilton'
+
+-- id 3168: How many tracks were composed by Brian Holland/Freddie Gorman/Georgia Dobbins/Robert Bateman/William Garrett?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Brian Holland/Freddie Gorman/Georgia Dobbins/Robert Bateman/William Garrett'
+
+-- id 3169: How many tracks were composed by Larry Williams?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Larry Williams'
+
+-- id 3170: What is the total length in minutes of all tracks in albums by Accept?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Accept'
+
+-- id 3171: What is the total quantity of TV Shows tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'TV Shows' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3172: How many tracks were composed by Cornell, Commerford, Morello, Wilk?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Cornell, Commerford, Morello, Wilk'
+
+-- id 3173: What is the average number of tracks per album for Cidade Negra?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Cidade Negra' GROUP BY al.AlbumId)
+
+-- id 3174: What is the average number of tracks per invoice for Chile?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Chile' GROUP BY i.InvoiceId)
+
+-- id 3175: What is the total quantity of Heavy Metal tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Heavy Metal' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3176: How many tracks were composed by Steven Tyler, Tom Hamilton?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Tom Hamilton'
+
+-- id 3177: What is the total revenue generated from Science Fiction tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Science Fiction'
+
+-- id 3178: What is the total revenue from tracks composed by Steven Tyler, Joe Perry?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry'
+
+-- id 3179: What is the total quantity of World tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3180: What is the total revenue from Protected MPEG-4 video file tracks in 2012?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected MPEG-4 video file' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3181: What is the average number of tracks per invoice for France?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'France' GROUP BY i.InvoiceId)
+
+-- id 3182: What is the total revenue generated from TV Shows tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'TV Shows'
+
+-- id 3183: What is the total revenue from customers assigned to Andrew Adams?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Andrew' AND e.LastName = 'Adams'
+
+-- id 3184: What is the total revenue from Protected MPEG-4 video file tracks in 2009?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected MPEG-4 video file' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3185: What is the total revenue generated from Latin tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Latin'
+
+-- id 3186: What is the total revenue from tracks composed by Jerry Cantrell?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Jerry Cantrell'
+
+-- id 3187: How many tracks were composed by Eddie Cochran/Jerry Capehart?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Eddie Cochran/Jerry Capehart'
+
+-- id 3188: What is the average number of tracks per invoice for Canada?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Canada' GROUP BY i.InvoiceId)
+
+-- id 3189: What is the total quantity of Heavy Metal tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Heavy Metal' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3190: What is the average number of tracks per invoice for India?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'India' GROUP BY i.InvoiceId)
+
+-- id 3191: How many tracks were composed by Steven Tyler, Desmond Child?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Desmond Child'
+
+-- id 3192: What is the total length in minutes of the On-The-Go 1 playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'On-The-Go 1'
+
+-- id 3193: What is the total quantity of Rock And Roll tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock And Roll' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3194: What is the total quantity of Heavy Metal tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Heavy Metal' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3195: What is the total revenue from tracks composed by Enotris Johnson/Little Richard/Robert "Bumps" Blackwell?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Enotris Johnson/Little Richard/Robert "Bumps" Blackwell'
+
+-- id 3196: What is the total revenue from AAC audio file tracks in 2013?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3197: What is the total revenue from customers assigned to Michael Mitchell?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN Employee e ON c.SupportRepId = e.EmployeeId WHERE e.FirstName = 'Michael' AND e.LastName = 'Mitchell'
+
+-- id 3198: What is the total revenue from tracks composed by Larry Williams?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Larry Williams'
+
+-- id 3199: What is the total quantity of Bossa Nova tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Bossa Nova' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3200: What is the total length in minutes of all tracks in albums by Marcos Valle?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Marcos Valle'
+
+-- id 3201: What is the total quantity of World tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3202: What is the rank of Brazil by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Brazil'
+
+-- id 3203: What is the total revenue from customers who have placed more than 9 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 9)
+
+-- id 3204: What is the total revenue from AAC audio file tracks in 2009?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3205: What is the total revenue from MPEG audio file tracks in 2013?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'MPEG audio file' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3206: What is the total quantity of Classical tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Classical' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3207: What is the average number of tracks per album for Azymuth?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Azymuth' GROUP BY al.AlbumId)
+
+-- id 3208: How many tracks were composed by Berry Gordy, Jr./Janie Bradford?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Berry Gordy, Jr./Janie Bradford'
+
+-- id 3209: What is the total quantity of Comedy tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3210: What is the rank of United Kingdom by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'United Kingdom'
+
+-- id 3211: What is the total revenue from customers who have placed more than 6 invoices?
+SELECT ROUND(SUM(i.Total), 2) FROM Invoice i WHERE i.CustomerId IN (SELECT CustomerId FROM Invoice GROUP BY CustomerId HAVING COUNT(*) > 6)
+
+-- id 3212: What is the average number of tracks per album for AC/DC?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'AC/DC' GROUP BY al.AlbumId)
+
+-- id 3213: What is the total quantity of Hip Hop/Rap tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Hip Hop/Rap' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3214: What is the average number of tracks per album for Alanis Morissette?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Alanis Morissette' GROUP BY al.AlbumId)
+
+-- id 3215: What is the total revenue generated from Metal tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Metal'
+
+-- id 3216: What is the total quantity of Opera tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Opera' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3217: What is the total quantity of Classical tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Classical' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3218: What is the average number of tracks per invoice for Poland?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Poland' GROUP BY i.InvoiceId)
+
+-- id 3219: What is the average number of tracks per invoice for Portugal?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Portugal' GROUP BY i.InvoiceId)
+
+-- id 3220: What is the average number of tracks per album for Led Zeppelin?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Led Zeppelin' GROUP BY al.AlbumId)
+
+-- id 3221: What is the total length in minutes of the Music Videos playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Music Videos'
+
+-- id 3222: How many tracks were composed by F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman?
+SELECT COUNT(*) FROM Track WHERE Composer = 'F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman'
+
+-- id 3223: What is the total revenue from tracks composed by Berry Gordy, Jr./Janie Bradford?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Berry Gordy, Jr./Janie Bradford'
+
+-- id 3224: What is the total revenue from Protected AAC audio file tracks in 2009?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3225: What is the total revenue from tracks composed by Cornell, Commerford, Morello, Wilk?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Cornell, Commerford, Morello, Wilk'
+
+-- id 3226: What is the total revenue generated from Soundtrack tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack'
+
+-- id 3227: What is the total revenue from tracks composed by Steven Tyler, Joe Perry, Jim Vallance, Holly Knight?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry, Jim Vallance, Holly Knight'
+
+-- id 3228: How many tracks were composed by Angus Young, Malcolm Young, Brian Johnson?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Angus Young, Malcolm Young, Brian Johnson'
+
+-- id 3229: What is the total quantity of Rock tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3230: What is the total revenue from MPEG audio file tracks in 2012?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'MPEG audio file' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3231: What is the rank of USA by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'USA'
+
+-- id 3232: What is the average number of tracks per album for Various Artists?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Various Artists' GROUP BY al.AlbumId)
+
+-- id 3233: What is the rank of France by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'France'
+
+-- id 3234: How many employees report to Nancy Edwards?
+SELECT COUNT(*) FROM Employee e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Nancy' AND LastName = 'Edwards')
+
+-- id 3235: How many tracks were composed by Audioslave/Chris Cornell?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Audioslave/Chris Cornell'
+
+-- id 3236: What is the total quantity of Alternative tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3237: How many tracks were composed by Steven Tyler, Joe Perry?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry'
+
+-- id 3238: What is the average number of tracks per album for Cláudio Zoli?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Cláudio Zoli' GROUP BY al.AlbumId)
+
+-- id 3239: What is the rank of Norway by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Norway'
+
+-- id 3240: What is the total quantity of Rock And Roll tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock And Roll' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3241: What is the total length in minutes of all tracks in albums by Alanis Morissette?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Alanis Morissette'
+
+-- id 3242: What is the total quantity of Easy Listening tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Easy Listening' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3243: What is the total revenue from Purchased AAC audio file tracks in 2009?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Purchased AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3244: What is the total revenue from tracks composed by Steven Tyler, Desmond Child?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Desmond Child'
+
+-- id 3245: What is the average number of tracks per album for Bruce Dickinson?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Bruce Dickinson' GROUP BY al.AlbumId)
+
+-- id 3246: What is the total length in minutes of the Classical 101 - Next Steps playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Classical 101 - Next Steps'
+
+-- id 3247: What is the total revenue from MPEG audio file tracks in 2009?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'MPEG audio file' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3248: What is the total revenue generated from World tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World'
+
+-- id 3249: What is the rank of Netherlands by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Netherlands'
+
+-- id 3250: What is the average invoice total for customers in countries with more than 9 customers?
+SELECT ROUND(AVG(i.Total), 2) FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IN (SELECT Country FROM Customer WHERE Country IS NOT NULL GROUP BY Country HAVING COUNT(*) > 9)
+
+-- id 3251: What is the total quantity of Jazz tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Jazz' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3252: What is the total length in minutes of all tracks in albums by Body Count?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Body Count'
+
+-- id 3253: How many tracks were composed by Jerry Cantrell, Layne Staley?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Jerry Cantrell, Layne Staley'
+
+-- id 3254: What is the total quantity of Jazz tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Jazz' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3255: What is the total quantity of Alternative tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3256: What is the total length in minutes of all tracks in albums by AC/DC?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'AC/DC'
+
+-- id 3257: What is the total revenue from tracks composed by Angus Young, Malcolm Young, Brian Johnson?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Angus Young, Malcolm Young, Brian Johnson'
+
+-- id 3258: What is the total revenue from MPEG audio file tracks in 2011?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'MPEG audio file' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3259: What is the total length in minutes of the TV Shows playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'TV Shows'
+
+-- id 3260: What is the total length in minutes of the Classical 101 - Deep Cuts playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Classical 101 - Deep Cuts'
+
+-- id 3261: What is the average number of tracks per invoice for Hungary?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Hungary' GROUP BY i.InvoiceId)
+
+-- id 3262: What is the average number of tracks per album for Audioslave?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Audioslave' GROUP BY al.AlbumId)
+
+-- id 3263: What is the total revenue from tracks composed by F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman'
+
+-- id 3264: What is the total revenue generated from Hip Hop/Rap tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Hip Hop/Rap'
+
+-- id 3265: What is the total quantity of TV Shows tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'TV Shows' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3266: What is the average number of tracks per album for Aerosmith?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Aerosmith' GROUP BY al.AlbumId)
+
+-- id 3267: What is the total quantity of Pop tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Pop' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3268: What is the average number of tracks per album for Billy Cobham?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Billy Cobham' GROUP BY al.AlbumId)
+
+-- id 3269: What is the total length in minutes of all tracks in albums by Billy Cobham?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Billy Cobham'
+
+-- id 3270: What is the average number of tracks per album for Accept?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Accept' GROUP BY al.AlbumId)
+
+-- id 3271: What is the total length in minutes of all tracks in albums by Chico Science & Nação Zumbi?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Chico Science & Nação Zumbi'
+
+-- id 3272: How many tracks were composed by Enotris Johnson/Little Richard/Robert "Bumps" Blackwell?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Enotris Johnson/Little Richard/Robert "Bumps" Blackwell'
+
+-- id 3273: How many tracks were composed by Jerry Cantrell?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Jerry Cantrell'
+
+-- id 3274: What is the rank of Argentina by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Argentina'
+
+-- id 3275: What is the total quantity of Reggae tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Reggae' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3276: What is the average number of tracks per invoice for Australia?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Australia' GROUP BY i.InvoiceId)
+
+-- id 3277: What is the average number of tracks per invoice for Sweden?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Sweden' GROUP BY i.InvoiceId)
+
+-- id 3278: What is the total length in minutes of all tracks in albums by Bruce Dickinson?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Bruce Dickinson'
+
+-- id 3279: What is the total revenue from tracks composed by Jerry Cantrell, Michael Starr, Sean Kinney?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Jerry Cantrell, Michael Starr, Sean Kinney'
+
+-- id 3280: What is the rank of Finland by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Finland'
+
+-- id 3281: What is the total revenue from Purchased AAC audio file tracks in 2013?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Purchased AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3282: What is the total quantity of Hip Hop/Rap tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Hip Hop/Rap' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3283: What is the average number of tracks per invoice for USA?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'USA' GROUP BY i.InvoiceId)
+
+-- id 3284: What is the total quantity of Metal tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Metal' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3285: What is the rank of Canada by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Canada'
+
+-- id 3286: How many tracks were composed by Steven Tyler, Joe Perry, Taylor Rhodes?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry, Taylor Rhodes'
+
+-- id 3287: What is the total revenue from tracks composed by Brian Holland/Freddie Gorman/Georgia Dobbins/Robert Bateman/William Garrett?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Brian Holland/Freddie Gorman/Georgia Dobbins/Robert Bateman/William Garrett'
+
+-- id 3288: What is the total revenue from tracks composed by AC/DC?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'AC/DC'
+
+-- id 3289: What is the total revenue from Protected AAC audio file tracks in 2010?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'Protected AAC audio file' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3290: What is the total length in minutes of all tracks in albums by Audioslave?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Audioslave'
+
+-- id 3291: What is the rank of Portugal by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Portugal'
+
+-- id 3292: What is the average number of tracks per album for Apocalyptica?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Apocalyptica' GROUP BY al.AlbumId)
+
+-- id 3293: What is the average number of tracks per album for Chico Buarque?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Chico Buarque' GROUP BY al.AlbumId)
+
+-- id 3294: What is the total quantity of Comedy tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3295: What is the average number of tracks per invoice for Italy?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId WHERE c.Country = 'Italy' GROUP BY i.InvoiceId)
+
+-- id 3296: What is the average number of tracks per album for Black Sabbath?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Black Sabbath' GROUP BY al.AlbumId)
+
+-- id 3297: What is the total quantity of Reggae tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Reggae' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3298: What is the total length in minutes of all tracks in albums by Apocalyptica?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Apocalyptica'
+
+-- id 3299: What is the total quantity of Soundtrack tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3300: What is the average number of tracks per album for Body Count?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Body Count' GROUP BY al.AlbumId)
+
+-- id 3301: What is the total revenue from tracks composed by Steven Tyler, Joe Perry, Taylor Rhodes?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry, Taylor Rhodes'
+
+-- id 3302: What is the average number of tracks per album for Caetano Veloso?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Caetano Veloso' GROUP BY al.AlbumId)
+
+-- id 3303: What is the average number of tracks per album for Marcos Valle?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Marcos Valle' GROUP BY al.AlbumId)
+
+-- id 3304: What is the total revenue from tracks composed by Steven Tyler, Joe Perry, Jim Vallance?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry, Jim Vallance'
+
+-- id 3305: What is the average number of tracks per album for Antônio Carlos Jobim?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Antônio Carlos Jobim' GROUP BY al.AlbumId)
+
+-- id 3306: How many tracks were composed by Steven Tyler, Jim Vallance?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Jim Vallance'
+
+-- id 3307: What is the total quantity of Science Fiction tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Science Fiction' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3308: How many tracks were composed by AC/DC?
+SELECT COUNT(*) FROM Track WHERE Composer = 'AC/DC'
+
+-- id 3309: What is the total length in minutes of all tracks in albums by Aerosmith?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Aerosmith'
+
+-- id 3310: What is the total revenue from MPEG audio file tracks in 2010?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId WHERE mt.Name = 'MPEG audio file' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3311: What is the total length in minutes of all tracks in albums by Milton Nascimento & Bebeto?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Milton Nascimento & Bebeto'
+
+-- id 3312: How many tracks were composed by Steven Tyler, Richie Supa?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Richie Supa'
+
+-- id 3313: What is the total length in minutes of all tracks in albums by BackBeat?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'BackBeat'
+
+-- id 3314: What is the total revenue from tracks composed by Steven Tyler, Joe Perry, Jack Blades, Tommy Shaw?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Steven Tyler, Joe Perry, Jack Blades, Tommy Shaw'
+
+-- id 3315: What is the total quantity of Bossa Nova tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Bossa Nova' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3316: What is the total quantity of R&B/Soul tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'R&B/Soul' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3317: What is the total quantity of Soundtrack tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3318: What is the total length in minutes of all tracks in albums by Gilberto Gil?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Gilberto Gil'
+
+-- id 3319: What is the total quantity of Comedy tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Comedy' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3320: What is the total length in minutes of all tracks in albums by Black Label Society?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Black Label Society'
+
+-- id 3321: How many tracks were composed by Steven Tyler, Joe Perry, Desmond Child?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry, Desmond Child'
+
+-- id 3322: How many tracks were composed by Bert Russell/Phil Medley?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Bert Russell/Phil Medley'
+
+-- id 3323: What is the total quantity of World tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'World' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3324: What is the total quantity of Drama tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Drama' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3325: How many tracks were composed by Apocalyptica?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Apocalyptica'
+
+-- id 3326: What is the total quantity of Sci Fi & Fantasy tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Sci Fi & Fantasy' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3327: What is the total quantity of Alternative & Punk tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Alternative & Punk' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3328: What is the total quantity of Pop tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Pop' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3329: What is the total length in minutes of all tracks in albums by Black Sabbath?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Black Sabbath'
+
+-- id 3330: What is the total quantity of Drama tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Drama' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3331: What is the total quantity of Hip Hop/Rap tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Hip Hop/Rap' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3332: How many tracks were composed by Steven Tyler, Joe Perry, Jack Blades, Tommy Shaw?
+SELECT COUNT(*) FROM Track WHERE Composer = 'Steven Tyler, Joe Perry, Jack Blades, Tommy Shaw'
+
+-- id 3333: What is the rank of Ireland by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Ireland'
+
+-- id 3334: What is the total quantity of Drama tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Drama' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3335: What is the average number of tracks per album for BackBeat?
+SELECT ROUND(AVG(track_count), 2) FROM (SELECT COUNT(*) as track_count FROM Album al JOIN Track t ON al.AlbumId = t.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'BackBeat' GROUP BY al.AlbumId)
+
+-- id 3336: What is the total revenue from tracks composed by Audioslave/Chris Cornell?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId WHERE t.Composer = 'Audioslave/Chris Cornell'
+
+-- id 3337: What is the total length in minutes of all tracks in albums by Led Zeppelin?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Track t JOIN Album al ON t.AlbumId = al.AlbumId JOIN Artist ar ON al.ArtistId = ar.ArtistId WHERE ar.Name = 'Led Zeppelin'
+
+-- id 3338: What is the total length in minutes of the Grunge playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Grunge'
+
+-- id 3339: How many tracks were composed by F. Baltes, S. Kaufman, U. Dirkscneider & W. Hoffman?
+SELECT COUNT(*) FROM Track WHERE Composer = 'F. Baltes, S. Kaufman, U. Dirkscneider & W. Hoffman'
+
+-- id 3340: What is the total quantity of Soundtrack tracks sold in 2010?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Soundtrack' AND strftime('%Y', i.InvoiceDate) = '2010'
+
+-- id 3341: What is the rank of Spain by total revenue?
+SELECT rank FROM (SELECT c.Country, RANK() OVER (ORDER BY SUM(i.Total) DESC) as rank FROM Invoice i JOIN Customer c ON i.CustomerId = c.CustomerId WHERE c.Country IS NOT NULL GROUP BY c.Country) WHERE Country = 'Spain'
+
+-- id 3342: What is the total quantity of Rock tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3343: What is the total quantity of Science Fiction tracks sold in 2011?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Science Fiction' AND strftime('%Y', i.InvoiceDate) = '2011'
+
+-- id 3344: What is the total length in minutes of the Classical 101 - The Basics playlist?
+SELECT ROUND(SUM(t.Milliseconds) / 60000.0, 2) FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId JOIN Track t ON pt.TrackId = t.TrackId WHERE p.Name = 'Classical 101 - The Basics'
+
+-- id 3345: What is the total quantity of Rock And Roll tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Rock And Roll' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3346: What is the total quantity of Latin tracks sold in 2013?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Latin' AND strftime('%Y', i.InvoiceDate) = '2013'
+
+-- id 3347: What is the total quantity of Heavy Metal tracks sold in 2009?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Heavy Metal' AND strftime('%Y', i.InvoiceDate) = '2009'
+
+-- id 3348: What is the total quantity of R&B/Soul tracks sold in 2012?
+SELECT SUM(il.Quantity) FROM InvoiceLine il JOIN Invoice i ON il.InvoiceId = i.InvoiceId JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'R&B/Soul' AND strftime('%Y', i.InvoiceDate) = '2012'
+
+-- id 3349: What is the total revenue generated from Easy Listening tracks?
+SELECT ROUND(SUM(il.UnitPrice * il.Quantity), 2) FROM InvoiceLine il JOIN Track t ON il.TrackId = t.TrackId JOIN Genre g ON t.GenreId = g.GenreId WHERE g.Name = 'Easy Listening'
+

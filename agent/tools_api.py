@@ -1,102 +1,48 @@
-"""API tools placeholder for external API calls."""
+"""API tools for external API calls."""
 
+import warnings
 from typing import Optional
 
-
-# Simple currency conversion rates (placeholder)
-# These represent "1 USD = X <currency>" rates (from RAG document)
-CURRENCY_RATES = {
-    "EUR": 1.18,  # 1 USD = 1.18 EUR
-    "GBP": 1.37,  # 1 USD = 1.37 GBP
-    "JPY": 110.0,  # 1 USD = 110 JPY
-    "CAD": 1.25,  # 1 USD = 1.25 CAD
-    "AUD": 1.35,  # 1 USD = 1.35 AUD
-}
-
-
-def convert_to_usd(amount: float, currency: str) -> float:
-    """
-    Simple deterministic conversion using fixed rates for a few currencies.
-    
-    This is a placeholder/demo tool. In production, this would call a real
-    currency API.
-    
-    Parameters
-    ----------
-    amount : float
-        Amount to convert
-    currency : str
-        Source currency code (EUR, GBP, JPY, CAD, AUD)
-        
-    Returns
-    -------
-    float
-        Amount in USD
-    """
-    currency = currency.upper()
-    if currency == "USD":
+def convert_to_usd(amount: float, rate: Optional[float] = None) -> float:
+    """Convert amount from foreign currency to USD. Rate format: 1 USD = rate <currency>."""
+    if rate is None:
+        warnings.warn("No conversion rate provided. Returning amount unchanged.", UserWarning)
         return amount
-    
-    if currency not in CURRENCY_RATES:
-        raise ValueError(f"Unsupported currency: {currency}. Supported: {list(CURRENCY_RATES.keys())}")
-    
-    # Convert to USD (divide by rate since CURRENCY_RATES stores "1 USD = X <currency>")
-    # If 1 USD = 1.18 EUR, then 1 EUR = 1/1.18 USD
-    return amount / CURRENCY_RATES[currency]
+    return round(amount / rate, 2)
 
 
-def convert_from_usd(amount_usd: float, target_currency: str) -> float:
-    """
-    Convert USD amount to target currency.
-    
-    Parameters
-    ----------
-    amount_usd : float
-        Amount in USD to convert
-    target_currency : str
-        Target currency code (EUR, GBP, JPY, CAD, AUD)
-        
-    Returns
-    -------
-    float
-        Amount in target currency
-    """
-    target_currency = target_currency.upper()
-    if target_currency == "USD":
+def convert_from_usd(amount_usd: float, rate: Optional[float] = None) -> float:
+    """Convert USD amount to foreign currency. Rate format: 1 USD = rate <currency>."""
+    if rate is None:
+        warnings.warn("No conversion rate provided. Returning amount unchanged.", UserWarning)
         return amount_usd
-    
-    if target_currency not in CURRENCY_RATES:
-        raise ValueError(f"Unsupported currency: {target_currency}. Supported: {list(CURRENCY_RATES.keys())}")
-    
-    # Convert from USD: multiply by the rate
-    # CURRENCY_RATES stores "1 USD = X <currency>" directly
-    rate = CURRENCY_RATES[target_currency]
-    return amount_usd * rate
+    return round(amount_usd * rate, 2)
 
 
-def get_weather(city: str) -> dict:
-    """
-    Placeholder weather API tool.
-    
-    Returns a mock weather response. In production, this would call a real
-    weather API.
-    
-    Parameters
-    ----------
-    city : str
-        City name
-        
-    Returns
-    -------
-    dict
-        Weather information
-    """
-    # Placeholder: return mock data
+def calculate_total_value(quantity: float, unit_price: float) -> float:
+    """Calculate total value from quantity and unit price."""
+    return round(quantity * unit_price, 2)
+
+
+def calculate_estimated_revenue(count: float, average_amount: float) -> float:
+    """Calculate estimated revenue from count and average amount."""
+    return round(count * average_amount, 2)
+
+
+def format_duration_hours(minutes: float) -> dict:
+    """Convert minutes to hours and minutes format."""
+    hours = int(minutes // 60)
+    remaining_minutes = round(minutes % 60, 2)
     return {
-        "city": city,
-        "temperature": 72,
-        "condition": "sunny",
-        "humidity": 65,
-        "note": "This is placeholder data. Real implementation would call a weather API.",
+        "hours": hours,
+        "minutes": remaining_minutes,
+        "formatted": f"{hours} hours and {remaining_minutes} minutes"
     }
+
+
+def calculate_percentage(part: float, total: float) -> float:
+    """Calculate percentage: (part / total) * 100."""
+    if total == 0:
+        return 0.0
+    return round((part / total) * 100, 2)
 

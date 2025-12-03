@@ -20,5 +20,79 @@ Genre Statistics:
 - Latin music has seen significant growth in recent years, especially in 2013
 - Classical and Jazz genres have a dedicated customer base
 
+Genre-Specific Information:
+
+Science Fiction:
+- Features soundtracks and music inspired by science fiction themes
+- Includes electronic and ambient tracks
+- Popular among fans of sci-fi movies and games
+- Smaller catalog but dedicated following
+
+Sci Fi & Fantasy:
+- Combines science fiction and fantasy themes
+- Features epic soundtracks and orchestral compositions
+- Popular among fans of fantasy and sci-fi media
+- Includes both original compositions and film/TV soundtracks
+
+Alternative & Punk:
+- One of the most popular genres in the store
+- Features independent and alternative rock bands
+- Strong sales, especially among younger demographics
+- Includes both classic punk and modern alternative tracks
+
+Heavy Metal:
+- Hard-hitting metal tracks
+- Popular among metal enthusiasts
+- Features both classic and modern metal bands
+- Strong presence in the catalog
+
+Rock And Roll:
+- Classic rock and roll from the 50s and 60s
+- Foundational genre for rock music
+- Includes both original recordings and covers
+- Popular among classic rock fans
+
+Bossa Nova:
+- Brazilian music genre
+- Smooth, sophisticated sound
+- Popular among jazz and world music fans
+- Features both classic and contemporary bossa nova
+
+Comedy:
+- Comedy albums and spoken word tracks
+- Includes stand-up comedy and comedy music
+- Unique genre with dedicated audience
+- Tracks are typically longer than music tracks
+
+Drama:
+- Soundtracks and music from dramatic productions
+- Includes orchestral and cinematic music
+- Popular among fans of film and theater
+- Features emotional and powerful compositions
+
+Soundtrack:
+- Music from movies, TV shows, and games
+- Very popular genre
+- Includes both original scores and featured songs
+- Strong sales across all demographics
+
+World:
+- Music from around the globe
+- Diverse collection of international music
+- Popular among world music enthusiasts
+- Includes traditional and contemporary world music
+
+Hip Hop/Rap:
+- Urban music genre
+- Features both classic and modern hip hop
+- Strong following among younger demographics
+- Includes both mainstream and underground tracks
+
+Easy Listening:
+- Relaxing, ambient music
+- Popular for background music
+- Features smooth jazz, instrumental, and soft rock
+- Appeals to a wide demographic
+
 The store tracks sales by genre to understand customer preferences and optimize inventory. Genre information is used for recommendations and marketing campaigns.
 

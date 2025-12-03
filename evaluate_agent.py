@@ -5,6 +5,7 @@ import json
 import sys
 import time
 import asyncio
+import random
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, Optional, List
@@ -92,16 +93,32 @@ Be lenient - if the tools match and the descriptions are semantically similar, c
 # Utilities: File I/O and State Management
 # ============================================================================
 
-def save_state(state: Dict[str, Any], output_file: Path, state_file: Path) -> None:
-    """Save trajectory to JSONL and full state to JSON."""
+
+
+def append_trajectory_events(
+    state: Dict[str, Any], 
+    output_file: Path, 
+    saved_event_count: int
+) -> int:
+    """
+    Append new trajectory events to the JSONL file incrementally.
+    
+    Returns:
+        int: New count of saved events
+    """
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
-    with open(output_file, "w") as f:
-        for event in state.get("trajectory", []):
-            f.write(json.dumps(event) + "\n")
+    trajectory = state.get("trajectory", [])
+    new_events = trajectory[saved_event_count:]
     
-    with open(state_file, "w") as f:
-        json.dump(state, f, indent=2, default=str)
+    if new_events:
+        # Append mode - open in append mode to add new events
+        with open(output_file, "a") as f:
+            for event in new_events:
+                f.write(json.dumps(event) + "\n")
+                f.flush()  # Force write to disk immediately
+    
+    return len(trajectory)
 
 
 def _prepare_expected_tool_calls(query_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -223,6 +240,16 @@ def _check_conversion_rate_implied(expected: Dict[str, Any], extracted: Dict[str
     )
     
     return usd_correct and converted_correct
+
+
+def _extract_numeric_from_sql_result(query_result: str) -> Optional[float]:
+    """Extract numeric value from SQL query result string."""
+    if not query_result:
+        return None
+    try:
+        return float(query_result.strip())
+    except (ValueError, AttributeError, TypeError):
+        return None
 
 
 def _numeric_match(expected: float, actual: Any, base_tolerance: float) -> bool:
@@ -385,7 +412,15 @@ def _check_multiple_sql_queries(
     result["queries_total"] = len(expected_queries)
     
     generated_queries = [r.get("generated_sql") for r in all_sql_results if r and r.get("generated_sql")]
-    result_values = [r.get("usd_value") for r in all_sql_results if r and r.get("usd_value") is not None]
+    # Extract numeric values from query_result strings
+    result_values = []
+    for r in all_sql_results:
+        if r and r.get("query_result"):
+            query_result = r.get("query_result")
+            # Try to extract numeric value from query result string
+            numeric_val = _extract_numeric_from_sql_result(query_result)
+            if numeric_val is not None:
+                result_values.append(numeric_val)
     
     # Check query matching if requested
     if check_query:
@@ -424,7 +459,8 @@ def _check_single_sql_query(
         return result
     
     generated_sql = sql_res.get("generated_sql")
-    result_value = sql_res.get("usd_value")
+    query_result = sql_res.get("query_result")
+    result_value = _extract_numeric_from_sql_result(query_result) if query_result else None
     
     result["generated_sql"] = generated_sql
     result["result_value"] = result_value
@@ -711,7 +747,6 @@ async def evaluate_simplified(
     expected_answer: Dict[str, Any],
     final_state: Dict[str, Any],
     expected_tool_calls: Dict[str, Any],
-    requires_tools: List,
     ground_truth_sql: Optional[str] = None,
     judge_llm = None
 ) -> Dict[str, Any]:
@@ -891,12 +926,31 @@ async def run_query(
     config = AgentConfig()
     initial_state = create_initial_state(question, config)
     
+    # Initialize trajectory file (create/truncate)
+    trajectory_file = query_log_dir / "trajectory.jsonl"
+    trajectory_file.parent.mkdir(parents=True, exist_ok=True)
+    trajectory_file.write_text("")  # Clear file at start
+    
     final_state = None
+    saved_event_count = 0  # Track how many events we've already saved
+    
     try:
         async for step in graph.astream(initial_state, stream_mode="values"):
             final_state = step
+            # Save trajectory incrementally after each step
+            saved_event_count = append_trajectory_events(
+                step, 
+                trajectory_file, 
+                saved_event_count
+            )
     except Exception as e:
         print(f"  [ERROR] {e}")
+        # Even on error, try to save whatever state we have
+        if final_state is None:
+            final_state = initial_state
+        # Save final state even on error
+        with open(query_log_dir / "final_state.json", "w") as f:
+            json.dump(final_state, f, indent=2, default=str)
         return {
             "query_id": query_id,
             "question": question,
@@ -909,8 +963,9 @@ async def run_query(
     if final_state is None:
         final_state = initial_state
     
-    # Save trajectory and full state
-    save_state(final_state, query_log_dir / "trajectory.jsonl", query_log_dir / "final_state.json")
+    # Save final state (trajectory already saved incrementally)
+    with open(query_log_dir / "final_state.json", "w") as f:
+        json.dump(final_state, f, indent=2, default=str)
     
     # Get agent's answer
     agent_answer = final_state.get("answer_draft", "No answer generated.")
@@ -924,7 +979,6 @@ async def run_query(
         expected_answer=expected_answer,
         final_state=final_state,
         expected_tool_calls=expected_tool_calls,
-        requires_tools=query_data.get("requires_tools", []),
         ground_truth_sql=query_data.get("ground_truth_sql"),
         judge_llm=judge_llm
     )
@@ -1082,22 +1136,40 @@ async def main():
     """Run evaluation on all composite queries.
     
     Usage:
-        python evaluate_agent.py [queries_file] [query_id]
+        python evaluate_agent.py [queries_file] [query_id] [--random N]
     
     Examples:
         python evaluate_agent.py                          # Run all queries
-        python evaluate_agent.py composite_queries.jsonl  # Run all queries from file
-        python evaluate_agent.py composite_queries.jsonl comp_9  # Run only query comp_9
-        python evaluate_agent.py comp_9                   # Run only query comp_9 (default file)
+        python evaluate_agent.py composite_queries_extended.jsonl  # Run all queries from file
+        python evaluate_agent.py composite_queries_extended.jsonl comp_3300  # Run only query comp_3300
+        python evaluate_agent.py comp_3300                 # Run only query comp_3300 (default file)
+        python evaluate_agent.py --random 10               # Run 10 random queries from default file
+        python evaluate_agent.py composite_queries_extended.jsonl --random 10  # Run 10 random queries from file
     """
     # Parse command line arguments
-    queries_file = Path("composite_queries.jsonl")
+    queries_file = Path("composite_queries_extended.jsonl")
     query_id = None
+    random_count = None
+    
+    # Check for --random flag
+    if "--random" in sys.argv:
+        random_idx = sys.argv.index("--random")
+        if random_idx + 1 < len(sys.argv):
+            try:
+                random_count = int(sys.argv[random_idx + 1])
+                # Remove --random and its value from argv for easier parsing
+                sys.argv = [sys.argv[0]] + [arg for i, arg in enumerate(sys.argv[1:], 1) if i != random_idx and i != random_idx + 1]
+            except ValueError:
+                print("Error: --random requires a number (e.g., --random 10)")
+                sys.exit(1)
+        else:
+            print("Error: --random requires a number (e.g., --random 10)")
+            sys.exit(1)
     
     if len(sys.argv) > 1:
         if len(sys.argv) == 2:
             arg = sys.argv[1]
-            queries_file = Path(arg) if Path(arg).exists() else Path("composite_queries.jsonl")
+            queries_file = Path(arg) if Path(arg).exists() else Path("composite_queries_extended.jsonl")
             query_id = arg if not Path(arg).exists() else None
         elif len(sys.argv) >= 3:
             queries_file = Path(sys.argv[1])
@@ -1124,6 +1196,15 @@ async def main():
             print(f"Available query IDs: {available_ids}")
             sys.exit(1)
         print(f"Filtered to query '{query_id}' (1/{original_count} queries)")
+    elif random_count:
+        # Select random subset
+        original_count = len(queries)
+        if random_count > original_count:
+            print(f"Warning: Requested {random_count} queries but only {original_count} available. Using all {original_count} queries.")
+            random_count = original_count
+        random.seed()  # Use system time for randomness
+        queries = random.sample(queries, random_count)
+        print(f"Selected {random_count} random queries from {original_count} total queries")
     
     print(f"Loaded {len(queries)} query/queries from {queries_file}")
     

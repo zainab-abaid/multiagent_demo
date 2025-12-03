@@ -1,0 +1,24 @@
+Chinook Music Store - Playlist Information
+
+The store offers curated playlists to help customers discover music. These playlists are carefully selected by our music experts.
+
+Grunge Playlist:
+- Features tracks from the grunge movement of the 1990s
+- Includes artists like Nirvana, Soundgarden, Alice in Chains, and Pearl Jam
+- Typically contains 10-20 tracks
+- Total duration approximately 60-70 minutes
+- Popular among fans of alternative rock and 90s music
+- The playlist captures the raw, emotional sound that defined the grunge era
+
+Classical 101 - The Basics Playlist:
+- Curated introduction to classical music
+- Features essential classical compositions
+- Designed for newcomers to classical music
+- Contains approximately 20-30 tracks
+- Total duration around 2 hours
+- Includes works from major classical composers
+- Perfect starting point for classical music exploration
+- Covers different periods: Baroque, Classical, Romantic, and Modern
+
+The store regularly updates playlists based on customer feedback and new releases. Playlists are organized by genre, mood, era, and theme to help customers find the perfect music for any occasion.
+

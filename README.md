@@ -24,12 +24,17 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
    REFLECTION_MODEL=gpt-4o-mini
    JUDGE_MODEL=gpt-4o-mini
    MAX_REPLANS=5  # Maximum number of replanning attempts
+   RAG_TOP_K=5  # Number of documents to retrieve in RAG queries
+   RAG_CHUNK_SIZE=512  # Chunk size for document splitting in RAG indexing
    ```
 
-3. **Initialize RAG store:**
+3. **Set up RAG documents:**
+   - Place your documents in a `documents/` folder at the repository root
+   - Then initialize the RAG vector store:
    ```bash
    python init_rag_store.py
    ```
+   Note: This must be run before using the agent. The vector store will be saved to `chroma_db/` and reused in future runs.
 
 4. **Run the agent:**
    ```bash
@@ -88,6 +93,6 @@ The replanning loop ensures the agent can recover from errors and gather missing
 ## Notes
 
 - The SQL database (`Chinook.db`) is automatically downloaded if missing
-- The RAG vector store (`chroma_db/`) is generated when you run `init_rag_store.py`
+- **RAG Setup**: Place documents in `documents/` folder at repo root, then run `init_rag_store.py` to create the vector store (`chroma_db/`)
 - Evaluation logs are saved to `logs/session/` directory
 
