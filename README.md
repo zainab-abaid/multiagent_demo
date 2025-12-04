@@ -2,6 +2,17 @@
 
 A LangGraph-based multi-agent system for answering questions using SQL queries, RAG retrieval, and API calls. Features replanning capabilities and support for both OpenAI and Groq models.
 
+## Prerequisites
+
+**IMPORTANT: You must initialize the RAG vector store before using the agent.**
+
+1. Place your documents in a `documents/` folder at the repository root
+2. Run the initialization script:
+   ```bash
+   python init_rag_store.py
+   ```
+   This creates the vector store in `chroma_db/` and must be completed before running the agent.
+
 ## Quick Start
 
 1. **Install dependencies:**
@@ -9,49 +20,56 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
    pip install -r requirements.txt
    ```
 
-2. **Set up environment:**
-   Create a `.env` file with:
+2. **Set up environment variables:**
+   Create a `.env` file with your API keys and configuration:
    ```
+   # Required API keys
    OPENAI_API_KEY=your_key_here
    GROQ_API_KEY=your_groq_key_here  # Optional, for Groq models
-   ```
    
-   You can also configure model-specific settings:
-   ```
+   # Model configuration (all optional, defaults shown)
    PLANNER_MODEL=gpt-4o-mini  # or groq/llama-3.1-70b-versatile
    SQL_MODEL=gpt-4o-mini
    ANSWER_MODEL=gpt-4o-mini
    REFLECTION_MODEL=gpt-4o-mini
    JUDGE_MODEL=gpt-4o-mini
+   
+   # Agent behavior configuration
    MAX_REPLANS=5  # Maximum number of replanning attempts (default: 3)
    RAG_TOP_K=5  # Number of documents to retrieve in RAG queries (default: 5)
    RAG_CHUNK_SIZE=512  # Chunk size for document splitting in RAG indexing (default: 512)
    ```
+   
+   All configuration options are set via environment variables in the `.env` file.
 
-3. **Set up RAG documents:**
-   - Place your documents in a `documents/` folder at the repository root
-   - Then initialize the RAG vector store:
-   ```bash
-   python init_rag_store.py
-   ```
-   Note: This must be run before using the agent. The vector store will be saved to `chroma_db/` and reused in future runs.
-
-4. **Run the agent (single query debugging):**
+3. **Run the agent:**
+   
+   **For single query debugging and detailed tracing:**
    ```bash
    python debug_agent.py "What is the total revenue for 2011?"
    ```
-
-5. **Run evaluation:**
+   Use `debug_agent.py` when you want to:
+   - Test a single query interactively
+   - See detailed step-by-step execution
+   - Debug specific issues with a query
+   - View full trajectory logs
+   
+   **For simplified evaluation (answer matching only):**
    ```bash
    # Run all queries from the default file
-   python evaluate_agent.py composite_queries_extended.jsonl
+   python simplified_evaluate_agent.py composite_queries_extended.jsonl
    
    # Run a specific query by ID
-   python evaluate_agent.py composite_queries_extended.jsonl comp_3300
+   python simplified_evaluate_agent.py composite_queries_extended.jsonl comp_3300
    
    # Run a random subset of queries
-   python evaluate_agent.py composite_queries_extended.jsonl --random 10
+   python simplified_evaluate_agent.py composite_queries_extended.jsonl --random 10
    ```
+   Use `simplified_evaluate_agent.py` when you want to:
+   - Quickly evaluate multiple queries
+   - See only answer matching scores (no plan/tool correctness)
+   - Get a simple average score across queries
+   - Focus on final answer quality
 
 ## Project Structure
 
@@ -74,9 +92,8 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
   - `llm_utils.py` - LLM initialization supporting OpenAI and Groq
   - `tracing.py` - Tracing utilities for logging LLM calls and tool execution
 - `debug_agent.py` - Single-query debugging tool with detailed tracing
-- `evaluate_agent.py` - Evaluation framework with ground truth comparison
+- `simplified_evaluate_agent.py` - Simplified evaluation (answer matching only)
 - `composite_queries_extended.jsonl` - Ground truth evaluation data (default)
-- `composite_queries.jsonl` - Alternative evaluation dataset
 - `documents/` - RAG documents (company info, pricing policy, genre info, artist info)
 - `init_rag_store.py` - Script to initialize RAG vector store (must run before using agent)
 
@@ -102,9 +119,10 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
   - Generates corrective steps if needed (up to `MAX_REPLANS` times)
   - Tracks replanning attempts in state and memory view
 - **Multi-Provider LLM Support**: Supports both OpenAI and Groq models (use `groq/<model>` prefix for Groq)
-- **Comprehensive Evaluation**: Tests against ground truth with detailed scoring
+- **Evaluation Tools**: 
+  - `debug_agent.py`: Single-query debugging with detailed tracing
+  - `simplified_evaluate_agent.py`: Quick evaluation focusing on answer matching only
   - Supports random sampling with `--random N` option
-  - Detailed trajectory logging for debugging
 
 ## Agent Flow
 
@@ -137,10 +155,10 @@ The replanning loop ensures the agent can recover from errors and gather missing
 ## Notes
 
 - **SQL Database**: The Chinook database (`Chinook.db`) is automatically downloaded if missing
-- **RAG Setup**: 
+- **RAG Setup (REQUIRED)**: 
   - Place documents in `documents/` folder at repo root
   - Run `python init_rag_store.py` to create the vector store (`chroma_db/`)
-  - This must be done before using the agent
+  - **This is a prerequisite** - the agent will not work without this step
 - **Recursion Limit**: Set to 150 to support multi-step workflows with replanning (configured when invoking the graph)
 - **State Management**: 
   - `replan_count` is incremented in `plan_controller_node` (a proper node) to ensure state mutations persist
