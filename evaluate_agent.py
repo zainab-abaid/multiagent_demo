@@ -935,7 +935,7 @@ async def run_query(
     saved_event_count = 0  # Track how many events we've already saved
     
     try:
-        async for step in graph.astream(initial_state, stream_mode="values"):
+        async for step in graph.astream(initial_state, stream_mode="values", config={"recursion_limit": 150}):
             final_state = step
             # Save trajectory incrementally after each step
             saved_event_count = append_trajectory_events(

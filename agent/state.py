@@ -57,9 +57,9 @@ class AgentState(TypedDict):
     latest_result: Optional[dict | str]  # store latest tool result for convenience
     tool_results: list[dict]  # structured list of tool execution results
     reflection: Optional[dict]  # structured reflection output for replanning
-    sql_results: Optional[list]  # list of SQL query results: [{generated_sql, query_result, step_query}, ...]
-    rag_docs: Optional[list]  # list of RAG document dicts
-    api_results: Optional[list]  # list of API call results: [{tool, input, output}, ...]
+    sql_results: Optional[list]  # list of SQL query results: [{step_id, generated_sql, query_result, step_query, success}, ...]
+    rag_results: Optional[list]  # list of RAG query results: [{step_id, query, docs}, ...]
+    api_results: Optional[list]  # list of API call results: [{step_id, tool, input, output}, ...]
     plan_history: list[dict]  # snapshots of previous plans before replanning
     feedback: Optional[str]  # feedback from planner to tool execution
     is_ready_for_answer: bool  # signal from planner that enough info is gathered
@@ -99,7 +99,7 @@ def create_initial_state(user_query: str, config: Optional[AgentConfig] = None) 
         tool_results=[],
         reflection=None,
         sql_results=None,
-        rag_docs=None,
+        rag_results=None,
         api_results=None,
         plan_history=[],
         feedback=None,
@@ -120,33 +120,125 @@ def dict_to_event(event_dict: dict) -> TraceEvent:
 
 def build_memory_view(state: AgentState) -> str:
     """
-    Build a memory view from the trajectory for planner/reflection nodes.
+    Build a structured memory view from state for planner/reflection nodes.
     
-    For now: simple raw concat of trajectory summaries.
-    Later: can be replaced with real compression strategies.
+    Creates clean, structured summaries of tool executions instead of raw trajectory logs.
+    This makes it easier for LLMs to understand what happened and reduces hallucination.
     """
-    if not state.get("trajectory"):
-        return "No events yet."
-    
-    # Simple approach: summarize last N events
-    # trajectory is stored as list of dicts
-    recent_events = state["trajectory"][-20:]  # last 20 events
-    
     parts = []
-    for event_dict in recent_events:
-        node_name = event_dict.get("node_name", "unknown")
-        event_type = event_dict.get("event_type", "unknown")
-        event_summary = f"[{node_name}:{event_type}]"
-        
-        if event_dict.get("input"):
-            input_str = str(event_dict["input"])[:200]  # truncate long inputs
-            event_summary += f" Input: {input_str}"
-        if event_dict.get("output"):
-            output_str = str(event_dict["output"])[:200]  # truncate long outputs
-            event_summary += f" Output: {output_str}"
-        if event_dict.get("error"):
-            event_summary += f" Error: {event_dict['error']}"
-        parts.append(event_summary)
+    
+    # Add context header
+    parts.append("=== CONTEXT ===")
+    parts.append(f'User query: "{state.get("user_query", "N/A")}"')
+    
+    # Current plan summary
+    plan = state.get("plan")
+    if plan and "steps" in plan:
+        parts.append("\nCurrent plan:")
+        for step in plan.get("steps", []):
+            step_id = step.get("id", "?")
+            action_type = step.get("action_type", "unknown")
+            tool = step.get("tool", "")
+            description = step.get("description", "")
+            tool_str = f"/{tool}" if tool else ""
+            parts.append(f"  - Step {step_id} ({action_type}{tool_str}): \"{description}\"")
+    else:
+        parts.append("\nCurrent plan: No plan yet")
+    
+    # Replanning state
+    replan_count = state.get("replan_count", 0)
+    max_replans = state.get("config", {}).get("max_replans", 3)
+    parts.append(f"\nReplanning state:")
+    parts.append(f"  - replan_count: {replan_count}")
+    parts.append(f"  - max_replans: {max_replans}")
+    if replan_count > 0:
+        parts.append(f"  - This is replanning attempt {replan_count + 1}/{max_replans + 1}")
+    parts.append("")
+    
+    # Build SQL tool execution summaries
+    sql_results = state.get("sql_results") or []
+    if sql_results:
+        parts.append("=== SQL TOOL EXECUTIONS ===")
+        for sql_res in sql_results:
+            step_id = sql_res.get("step_id", "N/A")
+            step_query = sql_res.get("step_query", "N/A")
+            generated_sql = sql_res.get("generated_sql", "N/A")
+            query_result = sql_res.get("query_result")
+            success = sql_res.get("success", query_result is not None)
+            
+            parts.append(f"\nExecuted tool: sql_tool")
+            parts.append(f"  Step ID: {step_id}")
+            parts.append(f"  Natural language query: {step_query}")
+            parts.append(f"  SQL query: {generated_sql}")
+            parts.append(f"  Status: {'success' if success else 'failed'}")
+            if query_result is not None:
+                # Try to parse numeric result for cleaner display
+                result_str = str(query_result)
+                if result_str.startswith("[(") and result_str.endswith(")]"):
+                    # Parse tuple result like "[(10,)]"
+                    try:
+                        import ast
+                        parsed = ast.literal_eval(result_str)
+                        if parsed and len(parsed) > 0 and len(parsed[0]) > 0:
+                            parts.append(f"  Result (parsed): {parsed[0][0]}")
+                        else:
+                            parts.append(f"  Result: {result_str}")
+                    except:
+                        parts.append(f"  Result: {result_str}")
+                else:
+                    parts.append(f"  Result: {result_str}")
+            else:
+                parts.append(f"  Result: None")
+    
+    # Build API tool execution summaries
+    api_results = state.get("api_results") or []
+    if api_results:
+        parts.append("\n=== API TOOL EXECUTIONS ===")
+        for api_res in api_results:
+            step_id = api_res.get("step_id", "N/A")
+            tool_name = api_res.get("tool", "unknown")
+            input_params = api_res.get("input", {})
+            output = api_res.get("output")
+            error = api_res.get("error")
+            
+            parts.append(f"\nExecuted tool: {tool_name}")
+            parts.append(f"  Step ID: {step_id}")
+            parts.append(f"  Input parameters: {input_params}")
+            if error:
+                parts.append(f"  Status: failed")
+                parts.append(f"  Error: {error}")
+            else:
+                parts.append(f"  Status: success")
+                parts.append(f"  Output: {output}")
+    
+    # Build RAG tool execution summaries (show queries and results)
+    rag_results = state.get("rag_results") or []
+    if rag_results:
+        parts.append("\n=== RAG TOOL EXECUTIONS ===")
+        for rag_res in rag_results:
+            step_id = rag_res.get("step_id", "N/A")
+            query = rag_res.get("query", "N/A")
+            docs = rag_res.get("docs", [])
+            
+            parts.append(f"\nExecuted tool: rag_tool")
+            parts.append(f"  Step ID: {step_id}")
+            parts.append(f"  Query: {query}")
+            parts.append(f"  Status: success")
+            parts.append(f"  Retrieved {len(docs)} document(s):")
+            for idx, doc in enumerate(docs[:3], 1):  # Show first 3 docs to avoid too much text
+                content = doc.get("content", "")
+                score = doc.get("score")
+                parts.append(f"    Document #{idx}:")
+                if score is not None:
+                    parts.append(f"      Relevance score: {score:.3f}")
+                # Truncate content for readability
+                content_preview = content[:300] + "..." if len(content) > 300 else content
+                parts.append(f"      Content: {content_preview}")
+            if len(docs) > 3:
+                parts.append(f"    ... and {len(docs) - 3} more document(s)")
+    
+    if not parts:
+        return "No tool executions yet."
     
     return "\n".join(parts)
 

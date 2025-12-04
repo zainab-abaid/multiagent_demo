@@ -2,7 +2,7 @@
 
 import logging
 from agent.state import AgentState
-from agent.tracing import traced_tool_call
+from agent.tracing import traced_tool_call, traced_async_tool_call
 from agent.tools_sql import sql_tool_nl_to_sql
 from agent.tools_rag import rag_tool
 from agent.api_router import api_router_llm
@@ -47,14 +47,19 @@ async def tool_caller_node(state: AgentState) -> AgentState:
             step_query = step.get("query") or state["user_query"]
             tool_input = {
                 "natural_language_query": step_query,
+                "state": state,  # sql_tool_nl_to_sql requires state parameter
                 "feedback": feedback
             }
             # TODO: Remove debug logging after fixing execution issue
             logger.info(f"[TOOL_CALLER] Executing SQL tool for step {step_id}: {step_query[:100]}")
-            tool_result = await sql_tool_nl_to_sql(
-                natural_language_query=step_query,
+            
+            # Execute SQL tool with trajectory logging (using async version for consistency with RAG/API tools)
+            tool_result = await traced_async_tool_call(
+                node_name="tool_caller",
                 state=state,
-                feedback=feedback
+                tool_name="sql_tool",
+                tool_callable=sql_tool_nl_to_sql,
+                tool_input=tool_input,
             )
             
             # TODO: Remove debug logging after fixing execution issue
@@ -64,23 +69,28 @@ async def tool_caller_node(state: AgentState) -> AgentState:
             if state.get("sql_results") is None:
                 state["sql_results"] = []
             state["sql_results"].append({
+                "step_id": step_id,
+                "step_query": step_query,
                 "generated_sql": tool_result.get("generated_sql"),
                 "query_result": tool_result.get("query_result"),
-                "step_query": step_query,
+                "success": tool_result.get("success", tool_result.get("query_result") is not None),
             })
             
             # Ensure tool_results is a list
             if state.get("tool_results") is None:
                 state["tool_results"] = []
+            # Remove state from tool_input before storing to avoid circular reference
+            clean_tool_input = {k: v for k, v in tool_input.items() if k != "state"}
             state["tool_results"].append({
                 "step_id": step_id,
                 "tool_name": "sql_tool",
-                "raw_input": tool_input,
+                "raw_input": clean_tool_input,
                 "raw_output": tool_result,
             })
             
         elif tool_name == "rag_tool":
-            tool_input = {"query": state["user_query"]}
+            step_query = step.get("query") or state["user_query"]
+            tool_input = {"query": step_query}
             tool_result = traced_tool_call(
                 node_name="tool_caller",
                 state=state,
@@ -88,7 +98,14 @@ async def tool_caller_node(state: AgentState) -> AgentState:
                 tool_callable=rag_tool,
                 tool_input=tool_input,
             )
-            state["rag_docs"] = tool_result
+            # Store RAG query execution (similar to SQL results) for memory view
+            if state.get("rag_results") is None:
+                state["rag_results"] = []
+            state["rag_results"].append({
+                "step_id": step_id,
+                "query": step_query,
+                "docs": tool_result,
+            })
             # Ensure tool_results is a list
             if state.get("tool_results") is None:
                 state["tool_results"] = []
@@ -124,6 +141,7 @@ async def tool_caller_node(state: AgentState) -> AgentState:
                 )
                 
                 api_call_results.append({
+                    "step_id": step_id,
                     "tool": registry_name,
                     "input": args,
                     "output": result,

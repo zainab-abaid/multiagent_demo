@@ -33,8 +33,11 @@ async def api_router_llm(user_query: str, state: Dict[str, Any], feedback: str =
                 summary += "No result"
             previous_summary.append(summary)
     
-    if state.get("rag_docs"):
-        for rag_doc in state.get("rag_docs", []):
+    # Get RAG documents from rag_results
+    rag_results = state.get("rag_results") or []
+    for rag_res in rag_results:
+        docs = rag_res.get("docs", [])
+        for rag_doc in docs:
             content = rag_doc.get("content", "")
             if content:
                 previous_summary.append(f"RAG_TOOL: {content}")

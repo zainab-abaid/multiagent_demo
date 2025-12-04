@@ -3,6 +3,7 @@
 import time
 import uuid
 from typing import Any, Callable
+from langchain_core.messages import SystemMessage, HumanMessage
 from agent.state import AgentState, TraceEvent, event_to_dict
 
 
@@ -130,19 +131,37 @@ async def traced_llm_call(
         end_time = time.time()
         latency_ms = (end_time - start_time) * 1000
         
-        # Prepare input/output for logging (truncate if too long, but preserve structure)
-        # For LLM calls, truncate more generously for prompts, but keep full response summary
+        # Prepare input/output for logging
+        # Replace system prompts with placeholders to reduce log size, but keep variables from HumanMessage
         if isinstance(llm_input, list):
-            # For message lists, show first and last messages fully, truncate middle
-            if len(llm_input) <= 2:
-                input_str = str(llm_input)
-            else:
-                input_str = f"[{llm_input[0]}, ... ({len(llm_input)-2} messages) ..., {llm_input[-1]}]"
-            # Limit to 3000 chars for input
-            if len(input_str) > 3000:
-                input_str = input_str[:3000] + "... (truncated)"
+            cleaned_messages = []
+            for msg in llm_input:
+                if isinstance(msg, SystemMessage):
+                    content = msg.content
+                    # Replace known system prompts with placeholders
+                    if content.startswith("You are a planning assistant"):
+                        cleaned_messages.append(SystemMessage(content="<planner prompt>"))
+                    elif content.startswith("You are a sophisticated planning assistant"):
+                        cleaned_messages.append(SystemMessage(content="<replan prompt>"))
+                    elif content.startswith("You are an assistant that answers questions by writing SQL"):
+                        cleaned_messages.append(SystemMessage(content="<sql_tool prompt>"))
+                    elif content.startswith("You are a helpful assistant that answers user questions"):
+                        cleaned_messages.append(SystemMessage(content="<answer prompt>"))
+                    elif content.startswith("You are a reflection assistant"):
+                        cleaned_messages.append(SystemMessage(content="<reflection prompt>"))
+                    elif content.startswith("You are an API routing assistant"):
+                        cleaned_messages.append(SystemMessage(content="<api_router prompt>"))
+                    else:
+                        # Unknown prompt - show first 50 chars
+                        cleaned_messages.append(SystemMessage(content=f"<system prompt: {content[:50]}...>"))
+                elif isinstance(msg, HumanMessage):
+                    # Keep HumanMessage as-is (contains the variables)
+                    cleaned_messages.append(msg)
+                else:
+                    cleaned_messages.append(msg)
+            input_str = str(cleaned_messages)
         else:
-            input_str = str(llm_input)[:2000] if llm_input else None
+            input_str = str(llm_input) if llm_input else None
         
         # For output, show more (up to 2000 chars) since it's the response
         output_str = str(output)[:2000] if output else None
@@ -218,6 +237,74 @@ def traced_tool_call(
                 output_str = json.dumps(sql_summary, indent=2)[:3000]  # Up to 3000 chars
             except:
                 output_str = str(output)[:3000]
+        else:
+            output_str = str(output)[:3000] if output else None
+        
+        create_trace_event(
+            node_name=node_name,
+            event_type="tool_call",
+            state=state,
+            input_data=input_str,
+            output_data=output_str,
+            latency_ms=latency_ms,
+            tool_name=tool_name,
+            error=error,
+        )
+    
+    return output
+
+
+async def traced_async_tool_call(
+    node_name: str,
+    state: AgentState,
+    tool_name: str,
+    tool_callable: Callable[..., Any],
+    tool_input: dict | str | None = None,
+    **kwargs
+) -> Any:
+    """
+    Async version of traced_tool_call for async tool functions.
+    Call the given async tool, measure latency, append a TraceEvent, and return the output.
+    """
+    start_time = time.time()
+    error = None
+    output = None
+    
+    try:
+        # Call the async tool
+        if isinstance(tool_input, dict):
+            output = await tool_callable(**tool_input, **kwargs)
+        elif tool_input is not None:
+            output = await tool_callable(tool_input, **kwargs)
+        else:
+            output = await tool_callable(**kwargs)
+            
+    except Exception as e:
+        error = str(e)
+        raise
+    finally:
+        end_time = time.time()
+        latency_ms = (end_time - start_time) * 1000
+        
+        # Prepare input/output for logging
+        if isinstance(tool_input, dict):
+            clean_input = {k: v for k, v in tool_input.items() if k != "state"}
+            input_str = str(clean_input)[:2000] if clean_input else None
+        else:
+            input_str = str(tool_input)[:2000] if tool_input else None
+        
+        # For output, format SQL results compactly for planner visibility
+        if tool_name == "sql_tool" and isinstance(output, dict):
+            try:
+                generated_sql = output.get("generated_sql", "")
+                query_result = output.get("query_result", output.get("execution_result", {}).get("result", ""))
+                success = output.get("success", True)
+                # Compact format: prioritize showing query_result (the actual data)
+                # SQL query truncated to 100 chars since planner mainly needs to see the result
+                sql_short = generated_sql[:100] + "..." if len(generated_sql) > 100 else generated_sql
+                output_str = f"SQL: {sql_short} | Result: {query_result} | Success: {success}"
+            except:
+                output_str = str(output)[:500]
         else:
             output_str = str(output)[:3000] if output else None
         

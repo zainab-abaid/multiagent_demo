@@ -120,7 +120,7 @@ async def main_async():
                 final_state = None
                 step_count = 0
                 
-                async for step in graph.astream(initial_state, stream_mode="values"):
+                async for step in graph.astream(initial_state, stream_mode="values", config={"recursion_limit": 150}):
                     final_state = step
                     step_count += 1
                     

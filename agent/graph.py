@@ -56,5 +56,7 @@ def build_agent_graph() -> Any:
     builder.add_edge("answer", "reflection")
     builder.add_edge("reflection", END)
     
+    # Compile with increased recursion limit for multi-step workflows
+    # Note: recursion_limit is set via config when invoking the graph, not at compile time
     return builder.compile()
 

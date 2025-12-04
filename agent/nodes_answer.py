@@ -105,7 +105,7 @@ async def answer_node(state: AgentState) -> AgentState:
 
     It uses structured tool outputs placed in state by tool_caller_node:
     - state["sql_results"]: list of SQL query results: [{generated_sql, query_result, step_query}, ...]
-    - state["rag_docs"]: list of retrieved documents (from rag_tool)
+    - state["rag_results"]: list of RAG query results: [{step_id, query, docs}, ...]
     - state["api_results"]: list of API call records:
         { "tool": <name>, "input": {...}, "output": <value or dict> }
     """
@@ -114,7 +114,12 @@ async def answer_node(state: AgentState) -> AgentState:
     
     # Format tool outputs into readable context for the LLM
     sql_block = _build_sql_block(state.get("sql_results") or [])
-    rag_block = _build_rag_block(state.get("rag_docs") or [])
+    # Extract docs from rag_results for _build_rag_block
+    rag_results = state.get("rag_results") or []
+    rag_docs = []
+    for rag_res in rag_results:
+        rag_docs.extend(rag_res.get("docs", []))
+    rag_block = _build_rag_block(rag_docs)
     api_block = _build_api_block(state.get("api_results") or [])
     
     # Combine tool context blocks
