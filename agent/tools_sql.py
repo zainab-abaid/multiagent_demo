@@ -137,6 +137,15 @@ IMPORTANT RULES:
 - Do NOT create calculated columns for currency conversions (e.g., do NOT multiply by 0.85, 1.18, etc.).
 - Currency conversions should be handled by separate API tools, not in SQL queries.
 
+CRITICAL: Handling comma-separated names in Composer/Artist fields:
+- Comma-separated names in the database (e.g., "Steven Tyler, Richie Supa") represent COLLABORATIONS stored as single strings, not separate individuals.
+- Use EXACT string matching (WHERE Composer = 'Name1, Name2') unless the query explicitly says "OR" or "either".
+- Only use IN (...) or OR when the user explicitly asks for "either X or Y" or "X or Y".
+- Examples:
+  * "composed by Steven Tyler, Richie Supa" → WHERE Composer = 'Steven Tyler, Richie Supa' (exact match)
+  * "composed by Steven Tyler or Richie Supa" → WHERE Composer IN ('Steven Tyler', 'Richie Supa') (either/or)
+  * "composed by either Steven Tyler or Richie Supa" → WHERE Composer IN ('Steven Tyler', 'Richie Supa') (either/or)
+
 If the user's question asks about multiple things (e.g., "X and Y"), write a SQL query for the part that requires database data only. Other information (like company policies, founding dates, etc.) should not be in the SQL query.
 
 Return ONLY the SQL query, nothing else."""

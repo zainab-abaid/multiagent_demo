@@ -33,6 +33,10 @@ chroma_db/
 .DS_Store
 Thumbs.db
 
+# uv
+.venv/
+uv.lock
+
 # Evaluation results (can be regenerated)
 *.jsonl
 !composite_queries_extended.jsonl  # Keep the main evaluation dataset (tracked in git)

@@ -9,11 +9,39 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
 1. Place your documents in a `documents/` folder at the repository root
 2. Run the initialization script:
    ```bash
+   # With uv
+   uv run python init_rag_store.py
+   
+   # With pip
    python init_rag_store.py
    ```
    This creates the vector store in `chroma_db/` and must be completed before running the agent.
 
 ## Quick Start
+
+### Option 1: Using `uv` (Recommended)
+
+1. **Install `uv`** (if not already installed):
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+   Or via pip: `pip install uv`
+
+2. **Set up environment variables:**
+   Create a `.env` file with your API keys and configuration (see Option 2 below for details).
+
+3. **Install dependencies and run scripts:**
+   ```bash
+   # Install dependencies
+   uv sync
+   
+   # Run scripts with uv
+   uv run python init_rag_store.py
+   uv run python debug_agent.py "What is the total revenue for 2011?"
+   uv run python simplified_evaluate_agent.py composite_queries_extended.jsonl
+   ```
+
+### Option 2: Using `pip`
 
 1. **Install dependencies:**
    ```bash
@@ -44,32 +72,39 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
 
 3. **Run the agent:**
    
+   **Note**: If using `uv`, prefix commands with `uv run` (e.g., `uv run python debug_agent.py ...`)
+   
    **For single query debugging and detailed tracing:**
    ```bash
+   # With uv
+   uv run python debug_agent.py "What is the total revenue for 2011?"
+   
+   # With pip
    python debug_agent.py "What is the total revenue for 2011?"
    ```
    Use `debug_agent.py` when you want to:
-   - Test a single query interactively
-   - See detailed step-by-step execution
-   - Debug specific issues with a query
-   - View full trajectory logs
+   - Test any single query and see a simple log.
    
    **For simplified evaluation (answer matching only):**
    ```bash
    # Run all queries from the default file
-   python simplified_evaluate_agent.py composite_queries_extended.jsonl
+   uv run python simplified_evaluate_agent.py composite_queries_extended.jsonl
+   # or: python simplified_evaluate_agent.py composite_queries_extended.jsonl
    
    # Run a specific query by ID
-   python simplified_evaluate_agent.py composite_queries_extended.jsonl comp_3300
+   uv run python simplified_evaluate_agent.py composite_queries_extended.jsonl comp_3300
    
    # Run a random subset of queries
-   python simplified_evaluate_agent.py composite_queries_extended.jsonl --random 10
+   uv run python simplified_evaluate_agent.py composite_queries_extended.jsonl --random 10
    ```
    Use `simplified_evaluate_agent.py` when you want to:
-   - Quickly evaluate multiple queries
-   - See only answer matching scores (no plan/tool correctness)
+   - Quickly evaluate multiple queries against groundtruth (in composite_queries_extended.jsonl)
+   - See answer matching scores from an LLM judge
    - Get a simple average score across queries
    - Focus on final answer quality
+   - Note: Some improvements in the evaluation and groundtruth are pending, as the groundtruth is AI generated. We have verified it to the best of our ability, but occasional errors persist.
+
+   For testing on any query that is in the provided dataset, we reocmmend you run simplified_evaluate_agent.py.
 
 ## Project Structure
 
@@ -91,9 +126,9 @@ A LangGraph-based multi-agent system for answering questions using SQL queries, 
   - `state.py` - Agent state definitions (includes `replan_count`, `rag_results`, `sql_results`, `api_results`)
   - `llm_utils.py` - LLM initialization supporting OpenAI and Groq
   - `tracing.py` - Tracing utilities for logging LLM calls and tool execution
-- `debug_agent.py` - Single-query debugging tool with detailed tracing
+- `debug_agent.py` - Single-query debugging tool with tracing
 - `simplified_evaluate_agent.py` - Simplified evaluation (answer matching only)
-- `composite_queries_extended.jsonl` - Ground truth evaluation data (default)
+- `composite_queries_extended.jsonl` - Ground truth evaluation data 
 - `documents/` - RAG documents (company info, pricing policy, genre info, artist info)
 - `init_rag_store.py` - Script to initialize RAG vector store (must run before using agent)
 
@@ -161,10 +196,9 @@ The replanning loop ensures the agent can recover from errors and gather missing
   - **This is a prerequisite** - the agent will not work without this step
 - **Recursion Limit**: Set to 150 to support multi-step workflows with replanning (configured when invoking the graph)
 - **State Management**: 
-  - `replan_count` is incremented in `plan_controller_node` (a proper node) to ensure state mutations persist
   - Tool results are stored in structured format: `sql_results`, `rag_results`, `api_results`
   - Memory view provides structured summaries of tool executions for the planner
 - **Evaluation**: 
-  - Logs are saved to `logs/session/eval_<timestamp>/` directory
+  - Logs are saved to `logs/session/eval_<timestamp>/` directory for simplified_evaluate_agent.py and as a single debug_* file if running debug_agent.py.
   - Each query has its own subdirectory with `trajectory.jsonl`, `evaluation.json`, and `final_state.json`
 
