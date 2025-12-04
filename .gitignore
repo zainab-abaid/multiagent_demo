@@ -35,7 +35,7 @@ Thumbs.db
 
 # Evaluation results (can be regenerated)
 *.jsonl
-!composite_queries_extended.jsonl  # Keep the main evaluation dataset
+!composite_queries_extended.jsonl  # Keep the main evaluation dataset (tracked in git)
 
 # Evaluation scripts (keep simplified version only)
 evaluate_agent.py
@@ -46,3 +46,7 @@ test_composite_queries.py
 
 # Database (auto-downloaded if missing)
 Chinook.db
+
+# Directories to exclude
+sql_dataset/
+cursor_markdowns/
